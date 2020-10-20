@@ -67,6 +67,8 @@ module cpu_wrapper(
 	output RREADY_M1,
 
     //wrapper need clk?
+	input clk,
+	input rst
 );
 
 endmodule
