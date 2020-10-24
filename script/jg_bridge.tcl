@@ -7,8 +7,8 @@ abvip -set_location $ABVIP_INST_DIR
 set_visualize_auto_load_debugging_tables on
 analyze -f $vip_dir/bridge_duv/jg.f -sv09
 elaborate -top top -param top.axi_master_0.READONLY_INTERFACE 1 -param top.axi_master_1.READONLY_INTERFACE 0\
--param top.axi_master_0.MAXPENDING $maxpend -param top.axi_master_1.MAXPENDING $maxpend\
--param top.axi_slave_0.MAXPENDING $maxpend -param top.axi_slave_1.MAXPENDING $maxpend\
+-param top.axi_master_0.MAX_PENDING $maxpend -param top.axi_master_1.MAX_PENDING $maxpend\
+-param top.axi_slave_0.MAX_PENDING $maxpend -param top.axi_slave_1.MAX_PENDING $maxpend\
 
 clock aclk_m
 clock aclk_s

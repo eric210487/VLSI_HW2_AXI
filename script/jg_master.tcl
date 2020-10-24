@@ -7,7 +7,7 @@ abvip -set_location $ABVIP_INST_DIR
 set_visualize_auto_load_debugging_tables on
 analyze -f $vip_dir/master_duv/jg.f -sv09
 elaborate -top top -param top.axi_monitor_0.READONLY_INTERFACE 1\
--param top.axi_monitor_0.MAXPENDING $maxpend -param top.axi_monitor_1.MAXPENDING $maxpend 
+-param top.axi_monitor_0.MAX_PENDING $maxpend -param top.axi_monitor_1.MAX_PENDING $maxpend 
 
 clock aclk
 reset ~aresetn
