@@ -82,30 +82,9 @@ always_ff @(posedge clk, posedge rst) begin
 	end
 	else begin
 		case (M0_state)
-			`CPU_WRAPPER_RM0_INI: begin
-				if(i_oe) begin
-					M0_state <= `CPU_WRAPPER_RM0_SEND;
-				end
-				else begin
-					M0_state <= `CPU_WRAPPER_RM0_INI;
-				end
-			end
-			`CPU_WRAPPER_RM0_SEND: begin
-				if(ARREADY_M0) begin
-					M0_state <= `CPU_WRAPPER_RM0_WAIT;
-				end
-				else begin
-					M0_state <= `CPU_WRAPPER_RM0_SEND;
-				end
-			end
-			`CPU_WRAPPER_RM0_WAIT: begin
-				if(RVALID_M0) begin
-					M0_state <= `CPU_WRAPPER_RM0_INI;
-				end
-				else begin
-					M0_state <= `CPU_WRAPPER_RM0_WAIT;
-				end
-			end
+			`CPU_WRAPPER_RM0_INI:	M0_state <= (i_oe)?`CPU_WRAPPER_RM0_SEND:`CPU_WRAPPER_RM0_INI;
+			`CPU_WRAPPER_RM0_SEND:	M0_state <= (ARREADY_M0)?`CPU_WRAPPER_RM0_WAIT:`CPU_WRAPPER_RM0_SEND;
+			`CPU_WRAPPER_RM0_WAIT:	M0_state <= (RVALID_M0)?`CPU_WRAPPER_RM0_INI:`CPU_WRAPPER_RM0_WAIT;
 		endcase
 	end
 end
@@ -148,57 +127,12 @@ always_ff @(posedge clk, posedge rst) begin
 		M0_state <= `CPU_WRAPPER_RM1_INI;
 	end
 	else begin
-		`CPU_WRAPPER_RM1_INI: begin
-			if(d_oe) begin
-				M1_state <= `CPU_WRAPPER_RM1_RSEND;
-			end
-			else if (d_web) begin //d_web need to be tune
-				M1_state <= `CPU_WRAPPER_RM1_WSEND;
-			end
-			else begin
-				M1_state <= `CPU_WRAPPER_RM1_INI;
-			end
-		end
-		`CPU_WRAPPER_RM1_RSEND: begin
-			if(ARREADY_M1) begin
-				M1_state <= `CPU_WRAPPER_RM1_RWAIT;
-			end
-			else begin
-				M1_state <= `CPU_WRAPPER_RM1_RSEND;
-			end
-		end
-		`CPU_WRAPPER_RM1_RWAIT: begin
-			if(RVALID_M1) begin
-				M1_state <= `CPU_WRAPPER_RM1_INI;
-			end
-			else begin
-				M1_state <= `CPU_WRAPPER_RM1_RWAIT;
-			end
-		end
-		`CPU_WRAPPER_RM1_WSEND: begin
-			if(AWREADY_M1) begin  
-				M1_state <= `CPU_WRAPPER_RM1_WWAIT;
-			end
-			else begin
-				M1_state <= `CPU_WRAPPER_RM1_WSEND;
-			end
-		end
-		`CPU_WRAPPER_RM1_WWAIT: begin
-			if(WREADY_M1) begin
-				M1_state <= `CPU_WRAPPER_RM1_WREADY;
-			end
-			else begin
-				M1_state <= `CPU_WRAPPER_RM1_WWAIT;
-			end
-		end
-		`CPU_WRAPPER_RM1_WREADY: begin
-			if(BVALID_M1) begin
-				M1_state <= `CPU_WRAPPER_RM1_INI;
-			end
-			else begin
-				M1_state <= `CPU_WRAPPER_RM1_WREADY;
-			end
-		end
+		`CPU_WRAPPER_RM1_INI: 	M1_state <= (d_oe)?`CPU_WRAPPER_RM1_RSEND:((d_web)?`CPU_WRAPPER_RM1_WSEND:`CPU_WRAPPER_RM1_INI);
+		`CPU_WRAPPER_RM1_RSEND: M1_state <= (ARREADY_M1)?`CPU_WRAPPER_RM1_RWAIT:`CPU_WRAPPER_RM1_RSEND;
+		`CPU_WRAPPER_RM1_RWAIT: M1_state <= (RVALID_M1)?`CPU_WRAPPER_RM1_INI:`CPU_WRAPPER_RM1_RWAIT;
+		`CPU_WRAPPER_RM1_WSEND: M1_state <= (AWREADY_M1)?`CPU_WRAPPER_RM1_WWAIT:`CPU_WRAPPER_RM1_WSEND;
+		`CPU_WRAPPER_RM1_WWAIT: M1_state <= (WREADY_M1)?`CPU_WRAPPER_RM1_WREADY:`CPU_WRAPPER_RM1_WWAIT;
+		`CPU_WRAPPER_RM1_WREADY:M1_state <= (BVALID_M1)?`CPU_WRAPPER_RM1_INI:`CPU_WRAPPER_RM1_WREADY;
 	end
 end
 always_comb begin

@@ -1,15 +1,49 @@
 module sram_wrapper(
-    
+    //WRITE ADDRESS
+	input [`AXI_IDS_BITS-1:0] AWID,
+	input [`AXI_ADDR_BITS-1:0] AWADDR,
+	input [`AXI_LEN_BITS-1:0] AWLEN,
+	input [`AXI_SIZE_BITS-1:0] AWSIZE,
+	input [1:0] AWBURST,
+	input AWVALID,
+	output AWREADY,
+    //WRITE DATA0
+	input [`AXI_DATA_BITS-1:0] WDATA,
+	input [`AXI_STRB_BITS-1:0] WSTRB,
+	input WLAST,
+	input WVALID,
+	output WREADY,
+    //WRITE RESPONSE0
+	output [`AXI_IDS_BITS-1:0] BID,
+	output [1:0] BRESP,
+	output BVALID,
+	input BREADY,
+    //READ ADDRESS0
+	input [`AXI_IDS_BITS-1:0] ARID,
+	input [`AXI_ADDR_BITS-1:0] ARADDR,
+	input [`AXI_LEN_BITS-1:0] ARLEN,
+	input [`AXI_SIZE_BITS-1:0] ARSIZE,
+	input [1:0] ARBURST,
+	input ARVALID,
+	output ARREADY,
+    //READ DATA0
+	output [`AXI_IDS_BITS-1:0] RID,
+	output [`AXI_DATA_BITS-1:0] RDATA,
+	output [1:0] RRESP,
+	output RLAST,
+	output RVALID,
+	input RREADY,
+
     input clk,
     input rst,
 );
 
-logic CS,
-logic OE,
-logic [3:0] WEB,
-logic [13:0] A,
-logic [31:0] DI,
-logic [31:0] DO
+logic CS;
+logic OE;
+logic [3:0] WEB;
+logic [13:0] A;
+logic [31:0] DI;
+logic [31:0] DO;
 
 SRAM i_SRAM (
     .A0   (A[0]  ),
@@ -99,6 +133,42 @@ SRAM i_SRAM (
     .CS   (CS    )
   );
 
+logic state;
 
+always_ff @(posedge clk, posedge rst) begin
+    if(rst) state <= `SRAM_WRAPPER_INI;
+    else begin
+        case (state)
+            `SRAM_WRAPPER_INI   : state <= (ARVALID)?`SRAM_WRAPPER_GETRA:((AWVALID&WVALID)?`SRAM_WRAPPER_GETWA:`SRAM_WRAPPER_INI);
+            `SRAM_WRAPPER_GETRA : state <= `SRAM_WRAPPER_SEND;
+            `SRAM_WRAPPER_SEND  : state <= (RREADY)?`SRAM_WRAPPER_INI:`SRAM_WRAPPER_SEND;
+            `SRAM_WRAPPER_GETWA : state <= `SRAM_WRAPPER_WRITE;
+            `SRAM_WRAPPER_WRITE : state <= (BREADY)?`SRAM_WRAPPER_INI:`SRAM_WRAPPER_WRITE;
+        endcase
+    end
+end
+
+always_comb begin
+    case (state)
+        `SRAM_WRAPPER_INI: begin
+            //WRITE ADDRESS
+            AWREADY = 
+            
+        end
+        `SRAM_WRAPPER_GETRA: begin
+            
+        end
+        `SRAM_WRAPPER_SEND: begin
+            
+        end
+        `SRAM_WRAPPER_GETWA: begin
+            
+        end
+        `SRAM_WRAPPER_WRITE: begin
+            
+        end
+
+    endcase
+end
 
 endmodule
