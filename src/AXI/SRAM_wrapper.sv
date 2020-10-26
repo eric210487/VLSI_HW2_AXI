@@ -1,49 +1,53 @@
-module sram_wrapper(
+`include "../../include/AXI_define.svh"
+//`include "../../sim/SRAM/SRAM.v"
+module SRAM_wrapper(
     //WRITE ADDRESS
 	input [`AXI_IDS_BITS-1:0] AWID,
 	input [`AXI_ADDR_BITS-1:0] AWADDR,
-	input [`AXI_LEN_BITS-1:0] AWLEN,
-	input [`AXI_SIZE_BITS-1:0] AWSIZE,
-	input [1:0] AWBURST,
+	input [`AXI_LEN_BITS-1:0] AWLEN,    //1
+	input [`AXI_SIZE_BITS-1:0] AWSIZE,  //1
+	input [1:0] AWBURST,                //0
 	input AWVALID,
-	output AWREADY,
-    //WRITE DATA0
+	output logic AWREADY,
+    //WRITE DATA
 	input [`AXI_DATA_BITS-1:0] WDATA,
 	input [`AXI_STRB_BITS-1:0] WSTRB,
 	input WLAST,
 	input WVALID,
-	output WREADY,
-    //WRITE RESPONSE0
-	output [`AXI_IDS_BITS-1:0] BID,
-	output [1:0] BRESP,
-	output BVALID,
+	output logic WREADY,
+    //WRITE RESPONSE
+	output logic [`AXI_IDS_BITS-1:0] BID,
+	output logic [1:0] BRESP,
+	output logic BVALID,
 	input BREADY,
-    //READ ADDRESS0
+    //READ ADDRESS
 	input [`AXI_IDS_BITS-1:0] ARID,
 	input [`AXI_ADDR_BITS-1:0] ARADDR,
-	input [`AXI_LEN_BITS-1:0] ARLEN,
-	input [`AXI_SIZE_BITS-1:0] ARSIZE,
-	input [1:0] ARBURST,
+	input [`AXI_LEN_BITS-1:0] ARLEN,    //1
+	input [`AXI_SIZE_BITS-1:0] ARSIZE,  //1
+	input [1:0] ARBURST,                //0
 	input ARVALID,
-	output ARREADY,
-    //READ DATA0
-	output [`AXI_IDS_BITS-1:0] RID,
-	output [`AXI_DATA_BITS-1:0] RDATA,
-	output [1:0] RRESP,
-	output RLAST,
-	output RVALID,
+	output logic ARREADY,
+    //READ DATA
+	output logic[`AXI_IDS_BITS-1:0] RID,
+	output logic[`AXI_DATA_BITS-1:0] RDATA,
+	output logic[1:0] RRESP,
+	output logic RLAST,
+	output logic RVALID,
 	input RREADY,
 
-    input clk,
-    input rst,
+    	input clk,
+    	input rst
 );
 
-logic CS;
-logic OE;
-logic [3:0] WEB;
-logic [13:0] A;
-logic [31:0] DI;
-logic [31:0] DO;
+/* sram signal */
+    logic CS;
+    logic OE;
+    logic [3:0] WEB;
+    logic [13:0] A;
+    logic [31:0] DI;
+    logic [31:0] DO;
+    assign CS = 1'b1;
 
 SRAM i_SRAM (
     .A0   (A[0]  ),
@@ -133,16 +137,41 @@ SRAM i_SRAM (
     .CS   (CS    )
   );
 
-logic state;
+/* wrapper signal */
+    logic [2:0]state;
+    logic [`AXI_IDS_BITS-1:0] AWID_reg, ARID_reg;
+    logic [`AXI_ADDR_BITS-1:0] AWADDR_reg, ARADDR_reg;
 
 always_ff @(posedge clk, posedge rst) begin
     if(rst) state <= `SRAM_WRAPPER_INI;
     else begin
         case (state)
-            `SRAM_WRAPPER_INI   : state <= (ARVALID)?`SRAM_WRAPPER_GETRA:((AWVALID&WVALID)?`SRAM_WRAPPER_GETWA:`SRAM_WRAPPER_INI);
+            `SRAM_WRAPPER_INI   : begin
+                if(ARVALID) begin
+                    state       <= `SRAM_WRAPPER_GETRA;
+                    ARID_reg    <= ARID;
+                    ARADDR_reg  <= ARADDR;
+                end
+                else if(AWVALID) begin
+                    state       <= `SRAM_WRAPPER_GETWA;
+                    AWID_reg    <= AWID;
+		    AWADDR_reg  <= AWADDR;
+                end
+		else if(AWVALID) begin
+		
+		end
+                else begin
+                    state       <= `SRAM_WRAPPER_INI;
+                    AWID_reg    <= `AXI_IDS_BITS'b0;
+	 	    AWADDR_reg  <= `AXI_ADDR_BITS'b0;
+                    ARID_reg    <= `AXI_IDS_BITS'b0;
+                    ARADDR_reg  <= `AXI_ADDR_BITS'b0;
+                end
+            end
             `SRAM_WRAPPER_GETRA : state <= `SRAM_WRAPPER_SEND;
             `SRAM_WRAPPER_SEND  : state <= (RREADY)?`SRAM_WRAPPER_INI:`SRAM_WRAPPER_SEND;
-            `SRAM_WRAPPER_GETWA : state <= `SRAM_WRAPPER_WRITE;
+            `SRAM_WRAPPER_GETWA : state <= (WVALID)?`SRAM_WRAPPER_GETW:`SRAM_WRAPPER_GETWA;
+            `SRAM_WRAPPER_GETW  : state <= `SRAM_WRAPPER_WRITE;
             `SRAM_WRAPPER_WRITE : state <= (BREADY)?`SRAM_WRAPPER_INI:`SRAM_WRAPPER_WRITE;
         endcase
     end
@@ -152,20 +181,141 @@ always_comb begin
     case (state)
         `SRAM_WRAPPER_INI: begin
             //WRITE ADDRESS
-            AWREADY = 
-            
+            AWREADY = 1'b0;
+            //WRITE DATA
+            WREADY  = 1'b0;
+            //WRITE RESPONSE
+            BID     = `AXI_IDS_BITS'b0;
+            BRESP   = 2'b0;
+            BVALID  = 1'b0;
+            //READ ADDRESS
+            ARREADY = 1'b0;
+            //READ DATA
+            RID     = `AXI_IDS_BITS'b0;
+            RDATA   = `AXI_DATA_BITS'b0;
+            RRESP   = 2'b0;
+            RLAST   = 1'b0;
+            RVALID  = 1'b0;
+            //OUTPUT TO SRAM
+            OE      = 1'b0;
+            WEB     = 4'b1111;
+            A       = 14'b0;
+            DI      = 32'b0;
         end
         `SRAM_WRAPPER_GETRA: begin
-            
+            //WRITE ADDRESS
+            AWREADY = 1'b0;
+            //WRITE DATA
+            WREADY  = 1'b0;
+            //WRITE RESPONSE
+            BID     = `AXI_IDS_BITS'b0;
+            BRESP   = 2'b0;
+            BVALID  = 1'b0;
+            //READ ADDRESS
+            ARREADY = 1'b1;
+            //READ DATA
+            RID     = `AXI_IDS_BITS'b0;
+            RDATA   = `AXI_DATA_BITS'b0;
+            RRESP   = 2'b0;
+            RLAST   = 1'b0;
+            RVALID  = 1'b0;
+            //OUTPUT TO SRAM
+            OE      = 1'b0;
+            WEB     = 4'b1111;
+            A       = ARADDR_reg[15:2];
+            DI      = 32'b0;
         end
         `SRAM_WRAPPER_SEND: begin
-            
+            //WRITE ADDRESS
+            AWREADY = 1'b0;
+            //WRITE DATA
+            WREADY  = 1'b0;
+            //WRITE RESPONSE
+            BID     = `AXI_IDS_BITS'b0;
+            BRESP   = 2'b0;
+            BVALID  = 1'b0;
+            //READ ADDRESS
+            ARREADY = 1'b0;
+            //READ DATA
+            RID     = ARID_reg;
+            RDATA   = DO;
+            RRESP   = `AXI_RESP_OKAY;
+            RLAST   = 1'b1;
+            RVALID  = 1'b1;
+            //OUTPUT TO SRAM
+            OE      = 1'b1;
+            WEB     = 4'b1111;
+            A       = ARADDR_reg[15:2];
+            DI      = 32'b0;
         end
         `SRAM_WRAPPER_GETWA: begin
-            
+            //WRITE ADDRESS
+            AWREADY = 1'b1;
+            //WRITE DATA
+            WREADY  = 1'b0;
+            //WRITE RESPONSE
+            BID     = `AXI_IDS_BITS'b0;
+            BRESP   = 2'b0;
+            BVALID  = 1'b0;
+            //READ ADDRESS
+            ARREADY = 1'b0;
+            //READ DATA
+            RID     = `AXI_IDS_BITS'b0;
+            RDATA   = `AXI_DATA_BITS'b0;
+            RRESP   = 2'b0;
+            RLAST   = 1'b0;
+            RVALID  = 1'b0;
+            //OUTPUT TO SRAM
+            OE      = 1'b0;
+            WEB     = 4'b0000;
+            A       = AWADDR[15:2];
+            DI      = WDATA;   
         end
+	`SRAM_WRAPPER_GETW: begin
+	   //WRITE ADDRESS
+            AWREADY = 1'b1;
+            //WRITE DATA
+            WREADY  = 1'b1;
+            //WRITE RESPONSE
+            BID     = `AXI_IDS_BITS'b0;
+            BRESP   = 2'b0;
+            BVALID  = 1'b0;
+            //READ ADDRESS
+            ARREADY = 1'b0;
+            //READ DATA
+            RID     = `AXI_IDS_BITS'b0;
+            RDATA   = `AXI_DATA_BITS'b0;
+            RRESP   = 2'b0;
+            RLAST   = 1'b0;
+            RVALID  = 1'b0;
+            //OUTPUT TO SRAM
+            OE      = 1'b0;
+            WEB     = 4'b0000;
+            A       = AWADDR_reg[15:2];
+            DI      = WDATA;   
+	end
         `SRAM_WRAPPER_WRITE: begin
-            
+            //WRITE ADDRESS
+            AWREADY = 1'b0;
+            //WRITE DATA
+            WREADY  = 1'b0;
+            //WRITE RESPONSE
+            BID     = AWID_reg;
+            BRESP   = `AXI_RESP_OKAY;
+            BVALID  = 1'b1;
+            //READ ADDRESS
+            ARREADY = 1'b0;
+            //READ DATA
+            RID     = `AXI_IDS_BITS'b0;
+            RDATA   = `AXI_DATA_BITS'b0;
+            RRESP   = 2'b0;
+            RLAST   = 1'b0;
+            RVALID  = 1'b0;
+            //OUTPUT TO SRAM
+            OE      = 1'b0;
+            WEB     = 4'b1111;
+            A       = 14'b0;
+            DI      = 32'b0;
         end
 
     endcase

@@ -4,7 +4,7 @@
 // Description: Top module of AXI master VIP                
 // Version:     1.0 
 //================================================
-
+`include "../../src/AXI/SRAM_wrapper.sv"
 module top #(parameter bit COVERAGE_ON = 0) ();
 
     // user defined AXI parameters
@@ -101,8 +101,41 @@ module top #(parameter bit COVERAGE_ON = 0) ();
     //-------------------------------------------//
     //----- you should put your design here -----//
     //-------------------------------------------//
-
-
+    wire rst;
+    assign rst = ~aresetn;
+    SRAM_wrapper axi_duv_slave(
+            .AWID(awid),
+            .AWADDR(awaddr),
+            .AWLEN(awlen),
+            .AWSIZE(awsize),
+            .AWBURST(awburst),
+            .AWVALID(awvalid),
+            .AWREADY(awready),
+            .WDATA(wdata),
+            .WSTRB(wstrb),
+            .WLAST(wlast),
+            .WVALID(wvalid),
+            .WREADY(wready),
+            .BID(bid),
+            .BRESP(bresp),
+            .BVALID(bvalid),
+            .BREADY(bready),
+            .ARID(arid),
+            .ARADDR(araddr),
+            .ARLEN(arlen),
+            .ARSIZE(arsize),
+            .ARBURST(arburst),
+            .ARVALID(arvalid),
+            .ARREADY(arready),
+            .RID(rid),
+            .RDATA(rdata),
+            .RRESP(rresp),
+            .RLAST(rlast),
+            .RVALID(rvalid),
+            .RREADY(rready),
+            .clk(aclk),
+            .rst(rst)
+    );
 
 
      axi4_master axi_monitor (
