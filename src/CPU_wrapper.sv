@@ -1,12 +1,4 @@
 module cpu_wrapper(
-    //connect with cpu(about M0 ISRAM)
-    //input i_cs,                         //chip select
-    input i_oe,                         //output enable
-    //input [3:0]i_web,                   //write enable
-    input [13:0]i_address,              //address
-    //input [data_size-1:0]i_di,     //data_in
-    output [data_size-1:0]i_do,         //data_out
-    //connect with AXI bus (about M0 ISRAM)
     //READ ADDRESS0
 	output [`AXI_ID_BITS-1:0] ARID_M0,          //don't need out of order (give zero?)
 	output [`AXI_ADDR_BITS-1:0] ARADDR_M0,
@@ -23,13 +15,6 @@ module cpu_wrapper(
 	input RVALID_M0,
 	output RREADY_M0,
 
-    //connect with cpu(about M1 DSRAM)
-    input d_cs,
-    input d_oe,
-    input [3:0]d_web,
-    input [13:0]d_address,
-    input [data_size-1:0]d_di,
-    output [data_size-1:0]d_do,
     //connect with AXI bus (about M1 DSRAM)
     //WRITE ADDRESS
 	output [`AXI_ID_BITS-1:0] AWID_M1,
@@ -98,6 +83,7 @@ always_comb begin
 			ARBURST_M0	=
 			ARVALID_M0	=
 			RREADY_M0	=
+			i_do		=
 		end
 		`CPU_WRAPPER_RM0_SEND: begin
 			ARID_M0		= 
@@ -107,6 +93,7 @@ always_comb begin
 			ARBURST_M0	=
 			ARVALID_M0	=
 			RREADY_M0	=
+			i_do		=
 		end
 		`CPU_WRAPPER_RM0_WAIT: begin
 			ARID_M0		= 
@@ -116,6 +103,7 @@ always_comb begin
 			ARBURST_M0	=
 			ARVALID_M0	=
 			RREADY_M0	=
+			i_do		=
 		end
 	endcase
 end
