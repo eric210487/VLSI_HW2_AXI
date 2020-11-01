@@ -1,8 +1,4 @@
-module arbitration(
+module crossbar();
 
-);
-endmodule
-module decoder(
 
-);
 endmodule
