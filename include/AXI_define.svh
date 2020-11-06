@@ -5,6 +5,7 @@
 `define AXI_SIZE_BITS 3
 `define AXI_DATA_BITS 32
 `define AXI_STRB_BITS 4
+
 `define AXI_LEN_ONE 4'h0
 `define AXI_SIZE_BYTE 3'b000
 `define AXI_SIZE_HWORD 3'b001
@@ -34,3 +35,10 @@
 `define SRAM_WRAPPER_GETWA  3'd3
 `define SRAM_WRAPPER_GETW   3'd4
 `define SRAM_WRAPPER_WRITE  3'd5
+
+parameter data_size = 32;
+parameter ins_size = 32;
+parameter pc_size = 32;
+parameter log_reg_num = 5;
+parameter reg_num = 32;
+parameter func_size = 4;
