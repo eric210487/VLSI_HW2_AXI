@@ -1,5 +1,5 @@
 //implement the hazard detection
-`include "parameters.svh"
+////`include "parameters.svh"
 module hazard_detector(
     output logic id_flush,
     output logic if_id_write,
@@ -10,10 +10,10 @@ module hazard_detector(
     input  branch,
     input  ubranch_jalr,
     input  id_ex_regwrite,
-    input  [log_reg_num-1:0]id_ex_rd,
-    input  [log_reg_num-1:0]ex_mem_rd,
-    input  [log_reg_num-1:0]if_id_r1,
-    input  [log_reg_num-1:0]if_id_r2
+    input  [`log_reg_num-1:0]id_ex_rd,
+    input  [`log_reg_num-1:0]ex_mem_rd,
+    input  [`log_reg_num-1:0]if_id_r1,
+    input  [`log_reg_num-1:0]if_id_r2
 );
 
 always_comb begin

@@ -1,5 +1,5 @@
 //finished
-`include "parameters.svh"
+//`include "parameters.svh"
 `include "EX/alu_control.sv"
 `include "EX/alu.sv"
 `include "EX/ex_mem_reg.sv"
@@ -8,14 +8,14 @@
 `include "EX/forwarding.sv"
 module EX(
 
-    output  [data_size-1:0]   result,
-    output  [data_size-1:0]   data2_out,
-    output  [log_reg_num-1:0] rd_out,
+    output  [`data_size-1:0]   result,
+    output  [`data_size-1:0]   data2_out,
+    output  [`log_reg_num-1:0] rd_out,
     output  wb_memtoreg_out,
     output  wb_regwrite_out,
     output  mem_memread_out,
     output  mem_memwrite_out,
-    output  [data_size-1:0] zero, //connect with the alu zero directly
+    output  [`data_size-1:0] zero, //connect with the alu zero directly
 
     output [1:0] r1_forwarding_signal,
     output [1:0] r2_forwarding_signal,
@@ -29,23 +29,23 @@ module EX(
     input   ex_alusrc_pc,
     input   [1:0]ex_aluop,
 
-    input   [data_size-1:0]   data1_in,
-    input   [data_size-1:0]   data2_in,
-    input   [data_size-1:0]   imm_in,
-    input   [log_reg_num-1:0] id_r1_in,
-    input   [log_reg_num-1:0] id_r2_in,
-    input   [log_reg_num-1:0] r1_in,
-    input   [log_reg_num-1:0] r2_in,
-    input   [log_reg_num-1:0] rd_in,
+    input   [`data_size-1:0]   data1_in,
+    input   [`data_size-1:0]   data2_in,
+    input   [`data_size-1:0]   imm_in,
+    input   [`log_reg_num-1:0] id_r1_in,
+    input   [`log_reg_num-1:0] id_r2_in,
+    input   [`log_reg_num-1:0] r1_in,
+    input   [`log_reg_num-1:0] r2_in,
+    input   [`log_reg_num-1:0] rd_in,
     input   ex_flush,
-    input   [data_size-1:0]   wb_data,
-    input   [log_reg_num-1:0] ex_mem_rd,
-    input   [log_reg_num-1:0] mem_wb_rd,
+    input   [`data_size-1:0]   wb_data,
+    input   [`log_reg_num-1:0] ex_mem_rd,
+    input   [`log_reg_num-1:0] mem_wb_rd,
     input   ex_mem_regwrite,
     input   mem_wb_regwrite,
-    input   [data_size-1:0]ex_mem_result,
+    input   [`data_size-1:0]ex_mem_result,
     input   [3:0]ins_30_14_12,
-    input   [pc_size-1:0]pc_in,
+    input   [`pc_size-1:0]pc_in,
     input   ubranch,
 
     input   clk,
@@ -53,7 +53,7 @@ module EX(
 );
 
 logic [3:0]alucontrol_out0;
-logic [data_size-1:0]result0, data1_0, data2_0, data2_1;
+logic [`data_size-1:0]result0, data1_0, data2_0, data2_1;
 logic [1:0]mux0_select, mux1_select, mux2_select;
 logic [1:0]wb_in,mem_in;
 logic [1:0]mux0_out,mux1_out;

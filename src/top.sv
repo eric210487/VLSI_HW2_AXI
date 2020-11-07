@@ -1,4 +1,4 @@
-`include "parameters.svh"
+`include "../include/parameters.svh"
 `include "cpu.sv"
 `include "SRAM_wrapper.sv"
 module top(
@@ -9,18 +9,19 @@ module top(
 logic i_cs, i_oe;
 logic [3:0]i_web;
 logic [13:0]i_address;
-logic [data_size-1:0]i_di;
+logic [`data_size-1:0]i_di;
 
 logic d_cs, d_oe, d_oe_reg;
 logic [3:0] d_web;
 logic [13:0]d_address;
-logic [data_size-1:0]d_di;
+logic [`data_size-1:0]d_di;
 
-logic [data_size-1:0]i_do,d_do;
+logic [`data_size-1:0]i_do,d_do;
 
 
 always_ff @(posedge clk, posedge rst) begin
-    d_oe_reg <= d_oe;
+    if (rst) d_oe_reg <= 1'b0;
+    else d_oe_reg <= d_oe;
 end
 
 cpu cpu(

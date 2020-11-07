@@ -4,7 +4,7 @@
 // Description: Top module of AXI master VIP                
 // Version:     1.0 
 //================================================
-
+`include "../../src/CPU_wrapper.sv"
 module top #(parameter bit COVERAGE_ON = 0) ();
     
     // user defined AXI parameters
@@ -36,6 +36,7 @@ module top #(parameter bit COVERAGE_ON = 0) ();
     
     
     // ----------master0---------- //
+    
 
     //--------------------------------------------//
     //----- You should add your signals here -----//
@@ -130,7 +131,55 @@ module top #(parameter bit COVERAGE_ON = 0) ();
     //----- you should put your design here -----//
     //-------------------------------------------//
   
+    wire rst;
+    assign rst = ~aresetn;
 
+    cpu_wrapper axi_duv_master (
+            .ARID_M0(arid_m0),
+            .ARADDR_M0(araddr_m0),
+            .ARLEN_M0(arlen_m0),
+            .ARSIZE_M0(arsize_m0),
+            .ARBURST_M0(arburst_m0),
+            .ARVALID_M0(arvalid_m0),
+            .ARREADY_M0(arready_m0),
+            .RID_M0(rid_m0),
+            .RDATA_M0(rdata_m0),
+            .RRESP_M0(rresp_m0),
+            .RLAST_M0(rlast_m0),
+            .RVALID_M0(rvalid_m0),
+            .RREADY_M0(rready_m0),
+            .AWID_M1(awid_m1),
+            .AWADDR_M1(awaddr_m1),
+            .AWLEN_M1(awlen_m1),
+            .AWSIZE_M1(awsize_m1),
+            .AWBURST_M1(awburst_m1),
+            .AWVALID_M1(awvalid_m1),
+            .AWREADY_M1(awready_m1),
+            .WDATA_M1(wdata_m1),
+            .WSTRB_M1(wstrb_m1),
+            .WLAST_M1(wlast_m1),
+            .WVALID_M1(wvalid_m1),
+            .WREADY_M1(wready_m1),
+            .BID_M1(bid_m1),
+            .BRESP_M1(bresp_m1),
+            .BVALID_M1(bvalid_m1),
+            .BREADY_M1(bready_m1),
+            .ARID_M1(arid_m1),
+            .ARADDR_M1(araddr_m1),
+            .ARLEN_M1(arlen_m1),
+            .ARSIZE_M1(arsize_m1),
+            .ARBURST_M1(arburst_m1),
+            .ARVALID_M1(arvalid_m1),
+            .ARREADY_M1(arready_m1),
+            .RID_M1(rid_m1),
+            .RDATA_M1(rdata_m1),
+            .RRESP_M1(rresp_m1),
+            .RLAST_M1(rlast_m1),
+            .RVALID_M1(rvalid_m1),
+            .RREADY_M1(rready_m1),
+            .clk(aclk),
+            .rst(aresetn)
+    );
 
 
 

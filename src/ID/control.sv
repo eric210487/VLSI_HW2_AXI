@@ -1,5 +1,5 @@
 //finished
-`include "parameters.svh"
+////`include "parameters.svh"
 module control(
     output logic branch,
     output logic ubranch,

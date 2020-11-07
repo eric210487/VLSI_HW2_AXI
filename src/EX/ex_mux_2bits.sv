@@ -1,5 +1,5 @@
 //finished
-`include "parameters.svh"
+//`include "parameters.svh"
 module ex_mux_2bits(
     output [1:0] out,
     input  [1:0] in1,

@@ -1,5 +1,5 @@
 //finished
-`include "parameters.svh"
+//`include "parameters.svh"
 module id_mux(
     output logic memread_out,
     output logic memwrite_out,

@@ -1,4 +1,4 @@
-`include "parameters.svh"
+////`include "parameters.svh"
 `include "IF/if.sv"
 `include "ID/id.sv"
 `include "EX/ex.sv"
@@ -11,16 +11,16 @@ module cpu(
     output i_oe,
     output [3:0]i_web,
     output [13:0]i_address,
-    output [data_size-1:0]i_di,
+    output [`data_size-1:0]i_di,
 
     output d_cs,
     output d_oe,
     output [3:0]d_web,
     output [13:0]d_address,
-    output [data_size-1:0]d_di,
+    output [`data_size-1:0]d_di,
 
-    input  [data_size-1:0]i_do,
-    input  [data_size-1:0]d_do,
+    input  [`data_size-1:0]i_do,
+    input  [`data_size-1:0]d_do,
     input  clk,
     input  rst
 );
@@ -32,42 +32,42 @@ assign i_di = 32'd0;
 assign i_oe = 1'b1;
 
 //if out
-logic [pc_size-1:0] pc_if_id_out;
+logic [`pc_size-1:0] pc_if_id_out;
 //id out
 logic hazard_if_id_write, hazard_pc_write;
 logic control_if_flush;
 logic pcsrc_0;
-logic [pc_size-1:0]branch_pc_0;
+logic [`pc_size-1:0]branch_pc_0;
 logic [4:0]r1_2, r2_2, rd_2;
-logic [data_size-1:0]r1_data_0, r2_data_0, imm_0;
+logic [`data_size-1:0]r1_data_0, r2_data_0, imm_0;
 logic memread_0, memwrite_1;
 logic alusrc_0;
 logic [1:0]aluop_0;
 logic [3:0]ins301412_0;
 logic memtoreg_2, regwrite_2;
 logic ex_flush_0;
-logic [log_reg_num-1:0]r1_to_forwarding,r2_to_forwarding;
-logic [pc_size-1:0] pc_0;
+logic [`log_reg_num-1:0]r1_to_forwarding,r2_to_forwarding;
+logic [`pc_size-1:0] pc_0;
 logic ex_alusrc_pc0;
 logic ubranch0;
 //ex out
-logic [data_size-1:0]result_1;
-logic [log_reg_num-1:0]rd_1;
+logic [`data_size-1:0]result_1;
+logic [`log_reg_num-1:0]rd_1;
 logic memtoreg_1, regwrite_1;
-logic [data_size-1:0]zero;
+logic [`data_size-1:0]zero;
 logic [1:0] r1_forwarding_signal, r2_forwarding_signal;
 logic lsword0;
 logic ex_mem_memread0;
-logic [data_size-1:0]data2_to_control;
+logic [`data_size-1:0]data2_to_control;
 //mem out
-logic [data_size-1:0]result_0;
+logic [`data_size-1:0]result_0;
 logic memtoreg_0, regwrite_0;
-logic [log_reg_num-1:0]rd_0;
+logic [`log_reg_num-1:0]rd_0;
 logic memwrite_0;
 logic lsword1;
 //wb out
-logic [data_size-1:0]wb_data;
-logic [data_size-1:0]convertdo;
+logic [`data_size-1:0]wb_data;
+logic [`data_size-1:0]convertdo;
 
 //assign
 assign d_address = result_1[15:2];

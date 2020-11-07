@@ -1,18 +1,18 @@
 //finished
-`include "parameters.svh"
+//`include "parameters.svh"
 module registers(
-    output logic[data_size-1:0] data_r1,
-    output logic[data_size-1:0] data_r2,
-    input  [log_reg_num-1:0]    read_r1,
-    input  [log_reg_num-1:0]    read_r2,
-    input  [log_reg_num-1:0]    write_rd,
-    input  [data_size-1:0]      write_data,
+    output logic[`data_size-1:0] data_r1,
+    output logic[`data_size-1:0] data_r2,
+    input  [`log_reg_num-1:0]    read_r1,
+    input  [`log_reg_num-1:0]    read_r2,
+    input  [`log_reg_num-1:0]    write_rd,
+    input  [`data_size-1:0]      write_data,
     input  regwrite,
     input  clk,
     input  rst
 );
 
-logic [data_size-1:0] reg_ [reg_num-1:0];
+logic [`data_size-1:0] reg_ [`reg_num-1:0];
 
 
 always_ff@(posedge clk or posedge rst)begin

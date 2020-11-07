@@ -1,3 +1,4 @@
+`include "../include/AXI_define.svh"
 `include "cpu.sv"
 module cpu_wrapper(
     //READ ADDRESS0

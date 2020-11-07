@@ -1,9 +1,9 @@
 //finished
-`include "parameters.svh"
+////`include "parameters.svh"
 module comparison(
     output logic pcsrc,
-    input  [data_size-1:0]r1_data,
-    input  [data_size-1:0]r2_data,
+    input  [`data_size-1:0]r1_data,
+    input  [`data_size-1:0]r2_data,
     input  [2:0]func3,
     input  branch
 );

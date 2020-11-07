@@ -486,7 +486,7 @@ module top #(parameter bit COVERAGE_ON = 0) ();
 
 
     // Instance of the AXI Master (connects to the slave interface of the bridge)
-    axi4_master axi_master_0 (
+    axi4_master axi_duv_master (
         .aclk            (aclk_m),
         .aresetn         (aresetn_m),
         .awid            (awid_m0),

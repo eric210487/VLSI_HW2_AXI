@@ -36,9 +36,11 @@
 `define SRAM_WRAPPER_GETW   3'd4
 `define SRAM_WRAPPER_WRITE  3'd5
 
+/*
 parameter data_size = 32;
 parameter ins_size = 32;
 parameter pc_size = 32;
 parameter log_reg_num = 5;
 parameter reg_num = 32;
 parameter func_size = 4;
+*/

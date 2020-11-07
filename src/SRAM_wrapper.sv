@@ -1,4 +1,4 @@
-`include "../../include/AXI_define.svh"
+`include "../include/AXI_define.svh"
 //`include "../../sim/SRAM/SRAM.v"
 module SRAM_wrapper(
     //WRITE ADDRESS

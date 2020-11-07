@@ -1,5 +1,5 @@
 //finished
-`include "parameters.svh"
+//`include "parameters.svh"
 `include "ID/registers.sv"
 `include "ID/control.sv"
 `include "ID/hazard_detector.sv"
@@ -13,12 +13,12 @@
 `include "ID/id_flush_branch.sv"
 
 module ID(
-    output  [log_reg_num-1:0]r1,
-    output  [log_reg_num-1:0]r2,
-    output  [log_reg_num-1:0]rd,
-    output  [data_size-1:0]  r1_data,
-    output  [data_size-1:0]  r2_data,
-    output  [data_size-1:0]  imm,
+    output  [`log_reg_num-1:0]r1,
+    output  [`log_reg_num-1:0]r2,
+    output  [`log_reg_num-1:0]rd,
+    output  [`data_size-1:0]  r1_data,
+    output  [`data_size-1:0]  r2_data,
+    output  [`data_size-1:0]  imm,
     output  mem_memread,
     output  mem_memwrite,
     output  ex_alusrc,
@@ -27,9 +27,9 @@ module ID(
     output  [3:0]ins_30_14_12,
     output  wb_memtoreg,
     output  wb_regwrite,
-    output  [pc_size-1:0]branch_pc,
+    output  [`pc_size-1:0]branch_pc,
     output  pcsrc,
-    output  [pc_size-1:0]pc_out,
+    output  [`pc_size-1:0]pc_out,
 
     //hazard detection
     output  if_id_write,   
@@ -39,21 +39,21 @@ module ID(
     output  if_flush,
     output  ex_flush,
 
-    output  [log_reg_num-1:0]r1_to_forwarding,
-    output  [log_reg_num-1:0]r2_to_forwarding,
+    output  [`log_reg_num-1:0]r1_to_forwarding,
+    output  [`log_reg_num-1:0]r2_to_forwarding,
     output  ubranch_out,
 
-    input   [ins_size-1:0]  ins_in,
-    input   [pc_size-1:0]   pc_in,
+    input   [`ins_size-1:0]  ins_in,
+    input   [`pc_size-1:0]   pc_in,
     input   regwrite,
     input   id_ex_memread,
     input   id_ex_regwrite,
     input   ex_mem_memread,
-    input   [log_reg_num-1:0]   id_ex_rd,
-    input   [log_reg_num-1:0]   ex_mem_rd,
-    input   [data_size-1:0]     wb_data,
-    input   [log_reg_num-1:0]   wb_rd, 
-    input   [data_size-1:0]     wb_result,
+    input   [`log_reg_num-1:0]   id_ex_rd,
+    input   [`log_reg_num-1:0]   ex_mem_rd,
+    input   [`data_size-1:0]     wb_data,
+    input   [`log_reg_num-1:0]   wb_rd, 
+    input   [`data_size-1:0]     wb_result,
     input   [1:0] r1_forwarding_signal,
     input   [1:0] r2_forwarding_signal,
 
@@ -64,8 +64,8 @@ module ID(
 logic branch0, memread0, memtoreg0, memwrite0, alusrc0, regwrite0, id_flush0;
 logic [1:0] aluop0;
 logic id_flush1;
-logic [pc_size-1:0] imm_out0;
-logic [data_size-1:0] r1_data0, r2_data0, r1_data1, r2_data1;
+logic [`pc_size-1:0] imm_out0;
+logic [`data_size-1:0] r1_data0, r2_data0, r1_data1, r2_data1;
 logic idmux_select;
 logic memread1, memtoreg1, memwrite1, alusrc1, regwrite1;
 logic [1:0] aluop1;
@@ -88,7 +88,8 @@ assign if_flush = pcsrc;
 assign ubranch_jalr = ubranch0 && !ins_in[3];
 
 always_ff @(posedge clk, posedge rst) begin
-    pcsrc_reg <= pcsrc; 
+    if(rst) pcsrc_reg <= 1'b0;
+    else pcsrc_reg <= pcsrc; 
 end
 
 registers registers0(

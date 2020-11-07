@@ -4,7 +4,7 @@
 // Description: Top module of AXI master VIP                
 // Version:     1.0 
 //================================================
-`include "../../src/AXI/SRAM_wrapper.sv"
+`include "../../src/SRAM_wrapper.sv"
 module top #(parameter bit COVERAGE_ON = 0) ();
 
     // user defined AXI parameters

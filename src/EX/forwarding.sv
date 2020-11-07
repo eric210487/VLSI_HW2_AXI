@@ -1,17 +1,17 @@
 //finished
-`include "parameters.svh"
+//`include "parameters.svh"
 module forwarding(
     output logic[1:0] mux0_select,
     output logic[1:0] mux1_select,
     output logic[1:0] mux2_select,
     output logic[1:0] id_mux0_select,
     output logic[1:0] id_mux1_select,
-    input  [log_reg_num-1:0]if_id_r1,
-    input  [log_reg_num-1:0]if_id_r2,
-    input  [log_reg_num-1:0]id_ex_r1,
-    input  [log_reg_num-1:0]id_ex_r2,
-    input  [log_reg_num-1:0]ex_mem_rd,
-    input  [log_reg_num-1:0]mem_wb_rd,
+    input  [`log_reg_num-1:0]if_id_r1,
+    input  [`log_reg_num-1:0]if_id_r2,
+    input  [`log_reg_num-1:0]id_ex_r1,
+    input  [`log_reg_num-1:0]id_ex_r2,
+    input  [`log_reg_num-1:0]ex_mem_rd,
+    input  [`log_reg_num-1:0]mem_wb_rd,
     input  ex_mem_regwrite,
     input  mem_wb_regwrite,
     input  alusrc,

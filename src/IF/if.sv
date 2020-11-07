@@ -1,23 +1,23 @@
-`include "parameters.svh"
+////`include "parameters.svh"
 `include "IF/if_id_reg.sv"
 `include "IF/pc_adder.sv"
 `include "IF/pc_mux.sv"
 `include "IF/pc_reg.sv"
 module IF(
     output [13:0] pc_to_iram,      //address(pc)
-    output [pc_size-1:0] pc_if_id,
+    output [`pc_size-1:0] pc_if_id,
 
     input  if_id_write,
     input  pc_write,
     input  if_flush,
-    input  [pc_size-1:0] branch_pc,
+    input  [`pc_size-1:0] branch_pc,
     input  pcsrc,               //from branch comparison(1 for branch)
 
     input  clk,
     input  rst
 );
 
-logic [pc_size-1:0] pc_mux_out,pc_add4,pc_reg_out,stallmux_out,if_id_pc;
+logic [`pc_size-1:0] pc_mux_out,pc_add4,pc_reg_out,stallmux_out,if_id_pc;
 assign pc_to_iram[13:0] = stallmux_out[15:2];
 assign pc_if_id = if_id_pc;
 pc_mux pc_mux(

@@ -1,10 +1,10 @@
-`include "parameters.svh"
+////`include "parameters.svh"
 module data_control(
     output logic[3:0]web,
-    output logic[data_size-1:0] shifted_data,
+    output logic[`data_size-1:0] shifted_data,
     input  lsword,
     input  [1:0] address_byte,
-    input  [data_size-1:0]data
+    input  [`data_size-1:0]data
 );
 always_comb begin
     if(lsword)begin
@@ -28,10 +28,6 @@ always_comb begin
             2'b11: begin
                 web = 4'b0111;
                 shifted_data = data << 24;
-            end
-            default: begin
-                web = 4'b1111;
-                shifted_data = data;
             end
         endcase
     end

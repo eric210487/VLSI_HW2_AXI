@@ -1,5 +1,5 @@
 //finished
-`include "parameters.svh"
+//`include "parameters.svh"
 module alu_control(
     output logic[3:0]out,
     output ls_word,
@@ -23,6 +23,7 @@ always_comb begin
             4'b1101: out = `ALUSRA;
             4'b0110: out = `ALUOR;
             4'b0111: out = `ALUAND;
+            default: out = `ALUADD;
         endcase
     end
     `ALUOP_U: begin
@@ -42,9 +43,6 @@ always_comb begin
     end
     `ALUOP_SL: begin
         out = `ALUADD;
-    end
-    default:begin
-        out = 4'b1111;
     end
     endcase
 end

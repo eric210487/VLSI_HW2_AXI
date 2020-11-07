@@ -1,20 +1,12 @@
 //finished
-`include "parameters.svh"
+//`include "parameters.svh"
 module imm_gen(
-    output  logic[data_size-1:0] imm,
-    input   [ins_size-1:0] ins
+    output  logic[`data_size-1:0] imm,
+    input   [`ins_size-1:0] ins
 );
 
 always_comb begin
     case (ins[6:0])
-        `I_OP: begin
-            for(int i=31;i>10;i--) begin
-                imm[i] = ins[31];
-            end
-            for(int i=10;i>=0;i--) begin
-                imm[i] = ins[20+i];
-            end
-        end
         `I_OP: begin
             for(int i=31;i>10;i--) begin
                 imm[i] = ins[31];

@@ -1,8 +1,8 @@
 //finished
-`include "parameters.svh"
+////`include "parameters.svh"
 module if_id_reg(
-    output  logic[pc_size-1:0]  pc_out,
-    input   [pc_size-1:0]   pc_in,
+    output  logic[`pc_size-1:0]  pc_out,
+    input   [`pc_size-1:0]   pc_in,
     input   wen,
     input   if_flush,
     input   clk,
@@ -10,12 +10,19 @@ module if_id_reg(
 );
 
 always@(posedge clk or posedge rst)begin
-    if(rst||if_flush) begin
+    if(rst) begin
+        pc_out  <= 1'b0;
+    end
+    else if(if_flush) begin
         pc_out  <= 1'b0;
     end
     else if(wen) begin
         pc_out  <= pc_in;
     end
+    else begin
+        pc_out  <= pc_out;
+    end
+
 end
 
 
