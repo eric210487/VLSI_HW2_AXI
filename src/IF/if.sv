@@ -1,10 +1,10 @@
 ////`include "parameters.svh"
-`include "if_id_reg.sv"
-`include "pc_adder.sv"
-`include "pc_mux.sv"
-`include "pc_reg.sv"
+`include "IF/if_id_reg.sv"
+`include "IF/pc_adder.sv"
+`include "IF/pc_mux.sv"
+`include "IF/pc_reg.sv"
 module IF(
-    output [13:0] pc_to_iram,          //address(pc)
+    output [31:0] pc_to_iram,          //address(pc)
     output [`pc_size-1:0] pc_if_id,
     output [`data_size-1:0] data_out,  //new(data to id stage)
 
@@ -22,21 +22,11 @@ module IF(
 );
 
 logic [`pc_size-1:0] pc_mux_out,pc_add4,pc_reg_out,stallmux_out;
-assign pc_to_iram[13:0] = pc_reg_out[15:2];
-
-//wen for pc_reg
-logic pc_reg_wen 
-assign pc_reg_wen = pc_write & ((~i_stall)|(~d_stall));
-//flush for if_reg
-logic if_id_reg_flush 
-assign if_id_reg_flush = if_flush | i_stall;
-//stall for if_reg
-logic if_id_reg_stall
-assign if_id_reg_stall = (~if_id_write) | d_stall;
+assign pc_to_iram = pc_reg_out;
 
 logic [`pc_size-1:0] branch_pc_reg;
 logic pcsrc_reg;
-always_ff (posedge clk ,posedge rst) begin
+always_ff @(posedge clk ,posedge rst) begin
     if(rst)begin
         branch_pc_reg <= `pc_size'b0;
         pcsrc_reg     <= 1'b0;
@@ -55,11 +45,21 @@ always_ff (posedge clk ,posedge rst) begin
     end
 end
 
+//wen for pc_reg
+logic pc_reg_wen ;
+assign pc_reg_wen = pc_write & (~(i_stall|d_stall));
+//flush for if_reg
+logic if_id_reg_flush ;
+assign if_id_reg_flush = pcsrc_reg | i_stall;
+//stall for if_reg
+logic if_id_reg_stall ;
+assign if_id_reg_stall = (~if_id_write) | d_stall;
+
 pc_mux pc_mux(
     .out(pc_mux_out),
     .in0(pc_add4),
-    .in1(branch_pc),
-    .select(pcsrc)
+    .in1(branch_pc_reg),
+    .select(pcsrc_reg)
 );
 pc_reg pc_reg(
     .pc_out(pc_reg_out),

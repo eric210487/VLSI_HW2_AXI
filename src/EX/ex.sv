@@ -1,11 +1,11 @@
 //finished
 //`include "parameters.svh"
-`include "alu_control.sv"
-`include "alu.sv"
-`include "ex_mem_reg.sv"
-`include "ex_mux_2bits.sv"
-`include "ex_mux_4inputs.sv"
-`include "forwarding.sv"
+`include "EX/alu_control.sv"
+`include "EX/alu.sv"
+`include "EX/ex_mem_reg.sv"
+`include "EX/ex_mux_2bits.sv"
+`include "EX/ex_mux_4inputs.sv"
+`include "EX/forwarding.sv"
 module EX(
 
     output  [`data_size-1:0]   result,

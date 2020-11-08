@@ -163,7 +163,7 @@ always_ff @(posedge clk, posedge rst) begin
                 else begin
                     state       <= `SRAM_WRAPPER_INI;
                     AWID_reg    <= `AXI_IDS_BITS'b0;
-	 	    AWADDR_reg  <= `AXI_ADDR_BITS'b0;
+	 	            AWADDR_reg  <= `AXI_ADDR_BITS'b0;
                     ARID_reg    <= `AXI_IDS_BITS'b0;
                     ARADDR_reg  <= `AXI_ADDR_BITS'b0;
                 end
@@ -267,9 +267,9 @@ always_comb begin
             RVALID  = 1'b0;
             //OUTPUT TO SRAM
             OE      = 1'b0;
-            WEB     = 4'b0000;
+            WEB     = 4'b1111;
             A       = AWADDR[15:2];
-            DI      = WDATA;   
+            DI      = 32'b0;   
         end
 	`SRAM_WRAPPER_GETW: begin
 	   //WRITE ADDRESS
@@ -290,7 +290,7 @@ always_comb begin
             RVALID  = 1'b0;
             //OUTPUT TO SRAM
             OE      = 1'b0;
-            WEB     = 4'b0000;
+            WEB     = WSTRB;
             A       = AWADDR_reg[15:2];
             DI      = WDATA;   
 	end

@@ -1,16 +1,16 @@
 //finished
 //`include "parameters.svh"
-`include "registers.sv"
-`include "control.sv"
-`include "hazard_detector.sv"
-`include "imm_gen.sv"
-`include "shift_left.sv"
-`include "addsum.sv"
-`include "comparison.sv"
-`include "id_mux.sv"
-`include "id_ex_reg.sv"
-`include "id_mux_4inputs.sv"
-`include "id_flush_branch.sv"
+`include "ID/registers.sv"
+`include "ID/control.sv"
+`include "ID/hazard_detector.sv"
+`include "ID/imm_gen.sv"
+`include "ID/shift_left.sv"
+`include "ID/addsum.sv"
+`include "ID/comparison.sv"
+`include "ID/id_mux.sv"
+`include "ID/id_ex_reg.sv"
+`include "ID/id_mux_4inputs.sv"
+`include "ID/id_flush_branch.sv"
 
 module ID(
     output  [`log_reg_num-1:0]r1,

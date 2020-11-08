@@ -5,17 +5,17 @@
 // Version:     1.0 
 //================================================
 `include "../../include/AXI_define.svh"
-`include "AR_ARBITRATOR.sv"
-`include "AW_ARBITRATOR.sv"
-`include "W_ARBITRATOR.sv"
-`include "R_ARBITRATOR.sv"
-`include "B_ARBITRATOR.sv"
-`include "AR_DECODER.sv"
-`include "AW_DECODER.sv"
-`include "W_DECODER.sv"
-`include "R_DECODER.sv"
-`include "B_DECODER.sv"
-`include "VIRTUALSLAVE.sv"
+`include "AXI/AR_ARBITRATOR.sv"
+`include "AXI/AW_ARBITRATOR.sv"
+`include "AXI/W_ARBITRATOR.sv"
+`include "AXI/R_ARBITRATOR.sv"
+`include "AXI/B_ARBITRATOR.sv"
+`include "AXI/AR_DECODER.sv"
+`include "AXI/AW_DECODER.sv"
+`include "AXI/W_DECODER.sv"
+`include "AXI/R_DECODER.sv"
+`include "AXI/B_DECODER.sv"
+`include "AXI/VIRTUALSLAVE.sv"
 
 module AXI(
 

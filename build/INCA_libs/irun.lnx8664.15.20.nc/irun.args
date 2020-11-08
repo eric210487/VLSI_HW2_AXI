@@ -3,13 +3,11 @@
 // Do not modify this file
 //
 /home/eric/Documents/VLSI/Hw2/N26091530/./sim/top_tb.sv
--sdf_file
-/home/eric/Documents/VLSI/Hw2/N26091530/./syn/top_syn.sdf
-+incdir+/home/eric/Documents/VLSI/Hw2/N26091530/./syn+/home/eric/Documents/VLSI/Hw2/N26091530/./include+/home/eric/Documents/VLSI/Hw2/N26091530/./sim
-+define+SYN+prog0
++incdir+/home/eric/Documents/VLSI/Hw2/N26091530/./src+/home/eric/Documents/VLSI/Hw2/N26091530/./src/AXI+/home/eric/Documents/VLSI/Hw2/N26091530/./include+/home/eric/Documents/VLSI/Hw2/N26091530/./sim
++define+prog1+FSDB_ALL
 -define
 CYCLE=10.0
 -define
 MAX=600000
 +access+r
-+prog_path=/home/eric/Documents/VLSI/Hw2/N26091530/./sim/prog0
++prog_path=/home/eric/Documents/VLSI/Hw2/N26091530/./sim/prog1

@@ -11,7 +11,7 @@ module if_id_reg(
     input   rst
 );
 
-always_ff(posedge clk ,posedge rst)begin
+always_ff@(posedge clk ,posedge rst)begin
     if(rst) begin
         pc_out   <= 1'b0;
         data_out <= `data_size'b0;

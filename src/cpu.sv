@@ -10,13 +10,13 @@ module cpu(
     output i_cs,
     output i_oe,
     output [3:0]i_web,
-    output [13:0]i_address,
+    output [31:0]i_address,
     output [`data_size-1:0]i_di,
 
     output d_cs,
     output d_oe,
     output [3:0]d_web,
-    output [13:0]d_address,
+    output [31:0]d_address,
     output [`data_size-1:0]d_di,
 
     input  [`data_size-1:0]i_do,
@@ -70,12 +70,13 @@ logic memtoreg_0, regwrite_0;
 logic [`log_reg_num-1:0]rd_0;
 logic memwrite_0;
 logic lsword1;
+logic [`data_size-1:0] d_do_out;
 //wb out
 logic [`data_size-1:0]wb_data;
 logic [`data_size-1:0]convertdo;
 
 //assign
-assign d_address = result_1[15:2];
+assign d_address = result_1;
 
 logic  [3:0] write_byte;
 
@@ -194,18 +195,20 @@ mem_wb_reg memwbreg0(
     .wb_memtoreg_out(memtoreg_0),
     .wb_regwrite_out(regwrite_0),
     .ls_word_out(lsword1),
+    .mem_out(d_do_out),
     .result_in(result_1),
     .rd_in(rd_1),
     .wb_memtoreg_in(memtoreg_1),
     .wb_regwrite_in(regwrite_1),
     .ls_word_in(lsword0),
+    .mem_in(d_do),
     .stall(d_stall),
     .clk(clk),
     .rst(rst)
 );
 wb_converter wbconverter0(
     .out(convertdo),
-    .in(d_do),
+    .in(d_do_out),
     .w_b(lsword1)
 );
 wb_mux wbmux0(
