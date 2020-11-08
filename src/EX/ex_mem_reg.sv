@@ -19,6 +19,8 @@ module ex_mem_reg(
     input  mem_memwrite_in,
     input  ls_word_in,
 
+    input stall,
+
     input  clk,
     input  rst
 );
@@ -33,6 +35,16 @@ always_ff @(posedge clk , posedge rst) begin
         mem_memread_out <= 1'b0;
         mem_memwrite_out<= 1'b0;
         ls_word_out     <= 1'b0;
+    end
+    else if(stall)begin
+        result_out      <= result_out;
+        data2_out       <= data2_out;
+        rd_out          <= rd_out;
+        wb_memtoreg_out <= wb_memtoreg_out;
+        wb_regwrite_out <= wb_regwrite_out;
+        mem_memread_out <= mem_memread_out;
+        mem_memwrite_out<= mem_memwrite_out;
+        ls_word_out     <= ls_word_out;
     end
     else begin
         result_out      <= result_in;

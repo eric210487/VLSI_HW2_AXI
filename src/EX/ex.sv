@@ -48,6 +48,7 @@ module EX(
     input   [`pc_size-1:0]pc_in,
     input   ubranch,
 
+    input   d_stall,
     input   clk,
     input   rst
 );
@@ -113,6 +114,7 @@ ex_mem_reg exmemreg0(
     .mem_memread_in(mux1_out[0]),
     .mem_memwrite_in(mux1_out[1]),
     .ls_word_in(ls_word0),
+    .stall(d_stall),
     .clk(clk),
     .rst(rst)
 );

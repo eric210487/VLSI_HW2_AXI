@@ -57,6 +57,7 @@ module ID(
     input   [1:0] r1_forwarding_signal,
     input   [1:0] r2_forwarding_signal,
 
+    input   d_stall,
     input   clk,
     input   rst
 );
@@ -222,6 +223,7 @@ id_ex_reg idexreg0(
     .ubranch_in(ubranch0),
     .r1_data_in(r1_data1),
     .r2_data_in(r2_data1),
+    .stall(d_stall),
     .clk(clk),
     .rst(rst)
 );

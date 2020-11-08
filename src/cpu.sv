@@ -21,6 +21,10 @@ module cpu(
 
     input  [`data_size-1:0]i_do,
     input  [`data_size-1:0]d_do,
+
+    input  i_stall,
+    input  d_stall,
+
     input  clk,
     input  rst
 );
@@ -33,6 +37,7 @@ assign i_oe = 1'b1;
 
 //if out
 logic [`pc_size-1:0] pc_if_id_out;
+logic [`data_size-1:0] ins_if_id_out;
 //id out
 logic hazard_if_id_write, hazard_pc_write;
 logic control_if_flush;
@@ -81,11 +86,15 @@ assign d_oe = ex_mem_memread0;
 IF if0(
     .pc_to_iram(i_address),
     .pc_if_id(pc_if_id_out),
+    .data_out(ins_if_id_out),
     .if_id_write(hazard_if_id_write),
     .pc_write(hazard_pc_write),
     .if_flush(control_if_flush),
     .branch_pc(branch_pc_0),
     .pcsrc(pcsrc_0),
+    .data_in(i_do),
+    .i_stall(i_stall),
+    .d_stall(d_stall),
     .clk(clk),
     .rst(rst)
 );
@@ -114,7 +123,7 @@ ID id0(
     .r1_to_forwarding(r1_to_forwarding),
     .r2_to_forwarding(r2_to_forwarding),
     .ubranch_out(ubranch0),
-    .ins_in(i_do),
+    .ins_in(ins_if_id_out),
     .pc_in(pc_if_id_out),
     .regwrite(regwrite_0),
     .id_ex_memread(memread_0),
@@ -127,6 +136,7 @@ ID id0(
     .wb_result(result_1),
     .r1_forwarding_signal(r1_forwarding_signal),
     .r2_forwarding_signal(r2_forwarding_signal),
+    .d_stall(d_stall),
     .clk(clk),
     .rst(rst)
 );
@@ -167,6 +177,7 @@ EX ex0(
     .ins_30_14_12(ins301412_0),
     .pc_in(pc_0),
     .ubranch(ubranch0),
+    .d_stall(d_stall),
     .clk(clk),
     .rst(rst)
 );
@@ -188,6 +199,7 @@ mem_wb_reg memwbreg0(
     .wb_memtoreg_in(memtoreg_1),
     .wb_regwrite_in(regwrite_1),
     .ls_word_in(lsword0),
+    .stall(d_stall),
     .clk(clk),
     .rst(rst)
 );

@@ -53,7 +53,6 @@ module cpu_wrapper(
 	input RVALID_M1,
 	output logic RREADY_M1,
 
-    //wrapper need clk?
 	input clk,
 	input rst
 );
@@ -73,6 +72,8 @@ module cpu_wrapper(
 //cpu input
 	logic [`data_size-1:0]i_do;
 	logic [`data_size-1:0]d_do;
+	logic i_stall;
+	logic d_stall;
 
 cpu cpu0(
 	.i_cs(i_cs),
@@ -89,11 +90,24 @@ cpu cpu0(
 
 	.i_do(i_do),
 	.d_do(d_do),
+
+	.i_stall(i_stall),
+	.d_stall(d_stall),
+
 	.clk(clk),
 	.rst(rst)
 );
 
+logic d_web_bit;
 
+always_comb begin
+	if(d_web==4'b1111) d_web_bit = 1'b0;
+	else d_web_bit = 1'b1;
+end
+
+
+assign i_stall = (~RVALID_M0) & i_oe;
+assign d_stall = (~RVALID_M1) & d_oe + (~BVALID_M1) & d_web_bit;
 
 
 logic [1:0]M0_state;
@@ -174,13 +188,13 @@ always_ff @(posedge clk, posedge rst) begin
 	else begin
 		case(M1_state)
 			`CPU_WRAPPER_RM1_INI: 	begin
-				M1_state <= (d_oe)?`CPU_WRAPPER_RM1_RSEND:((d_web)?`CPU_WRAPPER_RM1_WSEND:`CPU_WRAPPER_RM1_INI);
+				M1_state <= (d_oe)?`CPU_WRAPPER_RM1_RSEND:((d_web_bit)?`CPU_WRAPPER_RM1_WSEND:`CPU_WRAPPER_RM1_INI);
 				if(d_oe) begin
 					M1_r_addr_reg <= {16'b0,i_address,2'b0};
 					M1_w_addr_reg <= 32'b0;
 					M1_w_data_reg <= 32'b0;
 				end
-				else if(d_web) begin
+				else if(d_web_bit) begin
 					M1_r_addr_reg <= 32'b0;
 					M1_w_addr_reg <= {16'b0,d_address,2'b0};
 					M1_w_data_reg <= d_di;

@@ -36,6 +36,7 @@ module id_ex_reg(
     input [`data_size-1:0]r1_data_in,
     input [`data_size-1:0]r2_data_in, 
     
+    input stall,
 
     input clk,
     input rst
@@ -59,6 +60,24 @@ always_ff @(posedge clk, posedge rst) begin
         ubranch_out <= 1'b0;
         r1_data_out <= 1'b0;
         r2_data_out <= 1'b0;
+    end
+    else if(stall) begin
+        r1_out <= r1_out;
+        r2_out <= r2_out;
+        rd_out <= rd_out;
+        wb_memtoreg_out  <= wb_memtoreg_out;
+        wb_regwrite_out  <= wb_regwrite_out;
+        mem_memread_out  <= mem_memread_out;
+        mem_memwrite_out <= mem_memwrite_out;
+        ex_alusrc_out    <= ex_alusrc_out;
+        ex_aluop_out     <= ex_aluop_out;
+        ins_30_14_12_out <= ins_30_14_12_out;
+        pc_out  <=  pc_out;
+        alusrc_pc_out <= alusrc_pc_out;
+        imm_out <= imm_out;
+        ubranch_out <= ubranch_out;
+        r1_data_out <= r1_data_out;
+        r2_data_out <= r2_data_out;
     end
     else begin
         r1_out <= r1_in;

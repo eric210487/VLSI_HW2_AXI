@@ -12,6 +12,8 @@ module mem_wb_reg(
     input wb_regwrite_in,
     input ls_word_in,
 
+    input stall,
+
     input clk,
     input rst
 );
@@ -23,6 +25,13 @@ always_ff @(posedge clk or posedge rst)begin
         wb_memtoreg_out     <= 1'b0;
         wb_regwrite_out     <= 1'b0;
         ls_word_out         <= 1'b0;
+    end
+    else if(stall)begin
+        result_out          <= result_out;
+        rd_out              <= rd_out;
+        wb_memtoreg_out     <= wb_memtoreg_out;
+        wb_regwrite_out     <= wb_regwrite_out;
+        ls_word_out         <= ls_word_out;
     end
     else begin
         result_out          <= result_in;
