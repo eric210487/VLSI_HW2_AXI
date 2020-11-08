@@ -77,12 +77,3 @@
 `define log_reg_num 5
 `define reg_num 32
 `define func_size 4
-
-/*
-parameter data_size = 32;
-parameter ins_size = 32;
-parameter pc_size = 32;
-parameter log_reg_num = 5;
-parameter reg_num = 32;
-parameter func_size = 4;
-*/
