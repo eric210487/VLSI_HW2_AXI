@@ -1,5 +1,5 @@
 `include "../include/parameters.svh"
-`include "cpu.sv"
+`include "CPU_wrapper.sv"
 `include "SRAM_wrapper.sv"
 module top(
     input clk,
