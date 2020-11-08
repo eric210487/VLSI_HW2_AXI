@@ -1,4 +1,4 @@
-////`include "parameters.svh"
+`include "../include/AXI_define.svh"
 `include "IF/if.sv"
 `include "ID/id.sv"
 `include "EX/ex.sv"

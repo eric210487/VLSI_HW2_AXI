@@ -1,8 +1,8 @@
 ////`include "parameters.svh"
-`include "IF/if_id_reg.sv"
-`include "IF/pc_adder.sv"
-`include "IF/pc_mux.sv"
-`include "IF/pc_reg.sv"
+`include "if_id_reg.sv"
+`include "pc_adder.sv"
+`include "pc_mux.sv"
+`include "pc_reg.sv"
 module IF(
     output [13:0] pc_to_iram,      //address(pc)
     output [`pc_size-1:0] pc_if_id,

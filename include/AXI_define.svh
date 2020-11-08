@@ -78,7 +78,6 @@
 `define reg_num 32
 `define func_size 4
 
-`endif
 /*
 parameter data_size = 32;
 parameter ins_size = 32;
