@@ -1,109 +1,140 @@
 irun(64): 15.20-s039: (c) Copyright 1995-2017 Cadence Design Systems, Inc.
-TOOL:	irun(64)	15.20-s039: Started on Nov 09, 2020 at 00:15:31 CST
+TOOL:	irun(64)	15.20-s039: Started on Nov 09, 2020 at 12:21:17 CST
 irun
 	/home/eric/Documents/VLSI/Hw2/N26091530/./sim/top_tb.sv
 	+incdir+/home/eric/Documents/VLSI/Hw2/N26091530/./src+/home/eric/Documents/VLSI/Hw2/N26091530/./src/AXI+/home/eric/Documents/VLSI/Hw2/N26091530/./include+/home/eric/Documents/VLSI/Hw2/N26091530/./sim
-	+define+prog1+FSDB_ALL
+	+define+prog1
 	-define CYCLE=10.0
-	-define MAX=600000
+	-define MAX=6000000
 	+access+r
 	+prog_path=/home/eric/Documents/VLSI/Hw2/N26091530/./sim/prog1
 
    User defined plus("+") options:
 	+prog_path=/home/eric/Documents/VLSI/Hw2/N26091530/./sim/prog1
 
+file: /home/eric/Documents/VLSI/Hw2/N26091530/./sim/top_tb.sv
+`define CYCLE 10.0 // Cycle time
+                                |
+ncvlog: *W,MACNDF (/home/eric/Documents/VLSI/Hw2/N26091530/./sim/top_tb.sv,2|32): The text macro 'CYCLE' has also been defined on the command line using the -DEFINE command line option.  The compiler will ignore the definition found in the Verilog source code.
+`define MAX 300000 // Max cycle number
+                                      |
+ncvlog: *W,MACNDF (/home/eric/Documents/VLSI/Hw2/N26091530/./sim/top_tb.sv,3|38): The text macro 'MAX' has also been defined on the command line using the -DEFINE command line option.  The compiler will ignore the definition found in the Verilog source code.
+    $value$plusargs("prog_path=%s", prog_path);
+                  |
+ncvlog: *W,NOSYST (/home/eric/Documents/VLSI/Hw2/N26091530/./sim/top_tb.sv,43|18): System function '$value$plusargs' invoked as a task. Return value will be ignored.
+      $fscanf(gf, "%h\n", GOLDEN[num]);
+            |
+ncvlog: *W,NOSYST (/home/eric/Documents/VLSI/Hw2/N26091530/./sim/top_tb.sv,65|12): System function '$fscanf' invoked as a task. Return value will be ignored.
+ncvlog: *W,SPDUSD: Include directory /home/eric/Documents/VLSI/Hw2/N26091530/./include given but not used.
+	Total errors/warnings found outside modules and primitives:
+		errors: 0, warnings: 3
+		Caching library 'worklib' ....... Done
+	Elaborating the design hierarchy:
+	Top level design units:
+		shift_left
+		top_tb
+ncelab: *W,DSEMEL: This SystemVerilog design will be simulated as per IEEE 1800-2009 SystemVerilog simulation semantics. Use -disable_sem2009 option for turning off SV 2009 simulation semantics.
+	Building instance overlay tables: .................... Done
+	Building instance specific data structures.
+	Loading native compiled code:     .................... Done
+	Design hierarchy summary:
+		                  Instances  Unique
+		Modules:                 52      46
+		Registers:              445     412
+		Scalar wires:           556       -
+		Vectored wires:         301       -
+		Always blocks:           71      64
+		Initial blocks:           2       2
+		Cont. assignments:      120     115
+		Pseudo assignments:     252     220
+		Simulation timescale:  10ps
+	Writing initial simulation snapshot: worklib.shift_left:sv
 Loading snapshot worklib.shift_left:sv .................... Done
 ncsim: *W,DSEM2009: This SystemVerilog design is simulated as per IEEE 1800-2009 SystemVerilog simulation semantics. Use -disable_sem2009 option for turning off SV 2009 simulation semantics.
 *Verdi* Loading libsscore_ius152.so
 ncsim> source /opt/CIC/Cadence/INCISIV/INCISIVE_15.20.039/tools/inca/files/ncsimrc
 ncsim> run
-FSDB Dumper for IUS, Release Verdi_O-2018.09, Linux x86_64/64bit, 08/30/2018
-(C) 1996 - 2018 by Synopsys, Inc.
-*Verdi* FSDB WARNING: The FSDB file already exists. Overwriting the FSDB file may crash the programs that are using this file.
-*Verdi* : Create FSDB file 'top.fsdb'
-*Verdi* : Begin traversing the scope (top_tb.TOP), layer (0).
-*Verdi* : Enable +struct and +mda dumping.
-*Verdi* : End of traversing.
-DM[   0] = 00000000, expect = 8289dcd4
-DM[   1] = 00000000, expect = 8321141e
-DM[   2] = 00000000, expect = 8821e4e6
-DM[   3] = 00000000, expect = 93c394af
-DM[   4] = 00000000, expect = 9945ec90
-DM[   5] = 00000000, expect = 9b8f539f
-DM[   6] = 00000000, expect = a0e76a40
-DM[   7] = 00000000, expect = a0f86183
-DM[   8] = 00000000, expect = a5215048
-DM[   9] = 00000000, expect = a7c5f844
-DM[  10] = 00000000, expect = ac5bd4fb
-DM[  11] = 00000000, expect = b2359038
-DM[  12] = 00000000, expect = b85d8b73
-DM[  13] = 00000000, expect = b93c8233
-DM[  14] = 00000000, expect = bae08a03
-DM[  15] = 00000000, expect = bd5e4bd7
-DM[  16] = 00000000, expect = bd5edab7
-DM[  17] = 00000000, expect = c61ca276
-DM[  18] = 00000000, expect = cf5a57d3
-DM[  19] = 00000000, expect = d224c003
-DM[  20] = 00000000, expect = d4c79403
-DM[  21] = 00000000, expect = d7592630
-DM[  22] = 00000000, expect = d9fa04b1
-DM[  23] = 00000000, expect = df64795f
-DM[  24] = 00000000, expect = e0525a79
-DM[  25] = 00000000, expect = e37bf38b
-DM[  26] = 00000000, expect = e383caf0
-DM[  27] = 00000000, expect = e567e6fa
-DM[  28] = 00000000, expect = e5dbb3d0
-DM[  29] = 00000000, expect = eb927eff
-DM[  30] = 00000000, expect = ec6ae85d
-DM[  31] = 00000000, expect = edf3f250
-DM[  32] = 00000000, expect = fe2e1a6b
-DM[  33] = 00000000, expect = fe3bc3c8
+
+Done
+
+DM[   0] = 8289dcd4, pass
+DM[   1] = 8321141e, pass
+DM[   2] = 8821e4e6, pass
+DM[   3] = 93c394af, pass
+DM[   4] = 9945ec90, pass
+DM[   5] = 9b8f539f, pass
+DM[   6] = a0e76a40, pass
+DM[   7] = a0f86183, pass
+DM[   8] = a5215048, pass
+DM[   9] = a7c5f844, pass
+DM[  10] = ac5bd4fb, pass
+DM[  11] = b2359038, pass
+DM[  12] = b85d8b73, pass
+DM[  13] = b93c8233, pass
+DM[  14] = bae08a03, pass
+DM[  15] = bd5e4bd7, pass
+DM[  16] = bd5edab7, pass
+DM[  17] = c61ca276, pass
+DM[  18] = cf5a57d3, pass
+DM[  19] = d224c003, pass
+DM[  20] = d4c79403, pass
+DM[  21] = d7592630, pass
+DM[  22] = d9fa04b1, pass
+DM[  23] = df64795f, pass
+DM[  24] = e0525a79, pass
+DM[  25] = e37bf38b, pass
+DM[  26] = e383caf0, pass
+DM[  27] = e567e6fa, pass
+DM[  28] = e5dbb3d0, pass
+DM[  29] = eb927eff, pass
+DM[  30] = ec6ae85d, pass
+DM[  31] = edf3f250, pass
+DM[  32] = fe2e1a6b, pass
+DM[  33] = fe3bc3c8, pass
 DM[  34] = 00000000, pass
-DM[  35] = 00000000, expect = 00ec1335
-DM[  36] = 00000000, expect = 0338c9f7
-DM[  37] = 00000000, expect = 0436d51b
-DM[  38] = 00000000, expect = 066530b5
-DM[  39] = 00000000, expect = 13b1082d
-DM[  40] = 00000000, expect = 19383740
-DM[  41] = 00000000, expect = 19bf169b
-DM[  42] = 00000000, expect = 1f19454a
-DM[  43] = 00000000, expect = 1ffeb1ab
-DM[  44] = 00000000, expect = 24177e3f
-DM[  45] = 00000000, expect = 261e16ba
-DM[  46] = 00000000, expect = 2cad0c4b
-DM[  47] = 00000000, expect = 2e8d0ffb
-DM[  48] = 00000000, expect = 2fa4d86c
-DM[  49] = 00000000, expect = 30ef1ded
-DM[  50] = 00000000, expect = 36eaeb26
-DM[  51] = 00000000, expect = 37ff1409
-DM[  52] = 00000000, expect = 3afa563c
-DM[  53] = 00000000, expect = 3d8248a2
-DM[  54] = 00000000, expect = 3ea994d9
-DM[  55] = 00000000, expect = 44f808d3
-DM[  56] = 00000000, expect = 4db52726
-DM[  57] = 00000000, expect = 514c9dfd
-DM[  58] = 00000000, expect = 55507b33
-DM[  59] = 00000000, expect = 55f54ad2
-DM[  60] = 00000000, expect = 5d2b5714
-DM[  61] = 00000000, expect = 5fc5592e
-DM[  62] = 00000000, expect = 5fd797ec
-DM[  63] = xxxxxxxx, expect = 75fef64b
-SIM_END(16383) = xxxxxxxx, expect = ffffffff
+DM[  35] = 00ec1335, pass
+DM[  36] = 0338c9f7, pass
+DM[  37] = 0436d51b, pass
+DM[  38] = 066530b5, pass
+DM[  39] = 13b1082d, pass
+DM[  40] = 19383740, pass
+DM[  41] = 19bf169b, pass
+DM[  42] = 1f19454a, pass
+DM[  43] = 1ffeb1ab, pass
+DM[  44] = 24177e3f, pass
+DM[  45] = 261e16ba, pass
+DM[  46] = 2cad0c4b, pass
+DM[  47] = 2e8d0ffb, pass
+DM[  48] = 2fa4d86c, pass
+DM[  49] = 30ef1ded, pass
+DM[  50] = 36eaeb26, pass
+DM[  51] = 37ff1409, pass
+DM[  52] = 3afa563c, pass
+DM[  53] = 3d8248a2, pass
+DM[  54] = 3ea994d9, pass
+DM[  55] = 44f808d3, pass
+DM[  56] = 4db52726, pass
+DM[  57] = 514c9dfd, pass
+DM[  58] = 55507b33, pass
+DM[  59] = 55f54ad2, pass
+DM[  60] = 5d2b5714, pass
+DM[  61] = 5fc5592e, pass
+DM[  62] = 5fd797ec, pass
+DM[  63] = 75fef64b, pass
 
 
 
 
         ****************************               
         **                        **       |__||  
-        **  OOPS!!                **      / X,X  | 
+        **  Congratulations !!    **      / O.O  | 
         **                        **    /_____   | 
-        **  Simulation Failed!!   **   /^ ^ ^ \  |
+        **  Simulation PASS!!     **   /^ ^ ^ \  |
         **                        **  |^ ^ ^ ^ |w| 
         ****************************   \m___m__|_|
-         Totally has          64 errors                     
 
 
-Simulation complete via $finish(1) at time 6 MS + 0
-../sim/top_tb.sv:117     $finish;
+Simulation complete via $finish(1) at time 11786595 NS + 2
+../sim/top_tb.sv:87     $finish;
 ncsim> exit
-TOOL:	irun(64)	15.20-s039: Exiting on Nov 09, 2020 at 00:15:40 CST  (total: 00:00:09)
+TOOL:	irun(64)	15.20-s039: Exiting on Nov 09, 2020 at 12:21:21 CST  (total: 00:00:04)

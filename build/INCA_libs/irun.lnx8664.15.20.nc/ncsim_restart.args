@@ -4,13 +4,13 @@
 //
 +prog_path=/home/eric/Documents/VLSI/Hw2/N26091530/./sim/prog1
 +incdir+/home/eric/Documents/VLSI/Hw2/N26091530/./src+/home/eric/Documents/VLSI/Hw2/N26091530/./src/AXI+/home/eric/Documents/VLSI/Hw2/N26091530/./include+/home/eric/Documents/VLSI/Hw2/N26091530/./sim
-+define+prog1+FSDB_ALL
++define+prog1
 +access+r
 -MESSAGES
 +EMGRLOG
 irun.log
 -XLSTIME
-1604852131
+1604895677
 -XLKEEP
 -XLMODE
 ./INCA_libs/irun.lnx8664.15.20.nc
@@ -24,4 +24,4 @@ irun
 -XLVERSION
 "TOOL:	irun(64)	15.20-s039"
 -XLNAME
-./INCA_libs/irun.lnx8664.15.20.nc/erics-linux_2849
+./INCA_libs/irun.lnx8664.15.20.nc/erics-linux_13141
