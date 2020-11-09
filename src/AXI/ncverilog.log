@@ -1,0 +1,56 @@
+ncverilog(64): 15.20-s039: (c) Copyright 1995-2017 Cadence Design Systems, Inc.
+TOOL:	ncverilog	15.20-s039: Started on Nov 07, 2020 at 22:18:49 CST
+ncverilog
+	AXI.sv
+Recompiling... reason: file './AXI.sv' is newer than expected.
+	expected: Sat Nov  7 17:49:46 2020
+	actual:   Sat Nov  7 22:10:52 2020
+file: AXI.sv
+	module worklib.read_address_arbitrator:sv
+		errors: 0, warnings: 0
+	module worklib.read_address_decoder:sv
+		errors: 0, warnings: 0
+	module worklib.write_address_arbitrator:sv
+		errors: 0, warnings: 0
+	module worklib.write_address_decoder:sv
+		errors: 0, warnings: 0
+	module worklib.write_data_arbitrator:sv
+		errors: 0, warnings: 0
+	module worklib.AXI:sv
+		errors: 0, warnings: 0
+		Caching library 'worklib' ....... Done
+	Elaborating the design hierarchy:
+ncelab: *W,DSEMEL: This SystemVerilog design will be simulated as per IEEE 1800-2009 SystemVerilog simulation semantics. Use -disable_sem2009 option for turning off SV 2009 simulation semantics.
+	Building instance overlay tables: .................... Done
+	Generating native compiled code:
+		worklib.AXI:sv <0x7132b33c>
+			streams:   0, words:     0
+		worklib.read_address_arbitrator:sv <0x1f1edb66>
+			streams:   0, words:     0
+		worklib.read_address_decoder:sv <0x20ba831a>
+			streams:   0, words:     0
+		worklib.write_address_arbitrator:sv <0x79956e6c>
+			streams:   0, words:     0
+		worklib.write_address_decoder:sv <0x4de1da09>
+			streams:   0, words:     0
+		worklib.write_data_arbitrator:sv <0x286e2c23>
+			streams:   0, words:     0
+	Building instance specific data structures.
+	Loading native compiled code:     .................... Done
+	Design hierarchy summary:
+		              Instances  Unique
+		Modules:             11      11
+		Registers:          175     175
+		Scalar wires:        49       -
+		Vectored wires:      70       -
+		Always blocks:       13      13
+		Cont. assignments:    0       3
+	Writing initial simulation snapshot: worklib.AXI:sv
+Loading snapshot worklib.AXI:sv .................... Done
+ncsim: *W,DSEM2009: This SystemVerilog design is simulated as per IEEE 1800-2009 SystemVerilog simulation semantics. Use -disable_sem2009 option for turning off SV 2009 simulation semantics.
+*Verdi* Loading libsscore_ius152.so
+ncsim> source /usr/cad/cadence/INCISIV/cur/tools/inca/files/ncsimrc
+ncsim> run
+ncsim: *W,RNQUIE: Simulation is complete.
+ncsim> exit
+TOOL:	ncverilog	15.20-s039: Exiting on Nov 07, 2020 at 22:18:50 CST  (total: 00:00:01)
