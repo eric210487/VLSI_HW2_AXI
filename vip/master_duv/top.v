@@ -178,7 +178,7 @@ module top #(parameter bit COVERAGE_ON = 0) ();
             .RVALID_M1(rvalid_m1),
             .RREADY_M1(rready_m1),
             .clk(aclk),
-            .rst(aresetn)
+            .rst(rst)
     );
 
 

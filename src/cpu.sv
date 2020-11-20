@@ -1,26 +1,30 @@
 `include "../include/AXI_define.svh"
-`include "IF/if.sv"
-`include "ID/id.sv"
-`include "EX/ex.sv"
-`include "MEM/mem_wb_reg.sv"
-`include "MEM/data_control.sv"
-`include "WB/wb_mux.sv"
-`include "WB/wb_converter.sv"
+`include "if.sv"
+`include "id.sv"
+`include "ex.sv"
+`include "mem_wb_reg.sv"
+`include "data_control.sv"
+`include "wb_mux.sv"
+`include "wb_converter.sv"
 module cpu(
     output i_cs,
     output i_oe,
     output [3:0]i_web,
-    output [13:0]i_address,
+    output [31:0]i_address,
     output [`data_size-1:0]i_di,
 
     output d_cs,
     output d_oe,
     output [3:0]d_web,
-    output [13:0]d_address,
+    output [31:0]d_address,
     output [`data_size-1:0]d_di,
 
     input  [`data_size-1:0]i_do,
     input  [`data_size-1:0]d_do,
+
+    input  i_stall,
+    input  d_stall,
+
     input  clk,
     input  rst
 );
@@ -33,6 +37,7 @@ assign i_oe = 1'b1;
 
 //if out
 logic [`pc_size-1:0] pc_if_id_out;
+logic [`data_size-1:0] ins_if_id_out;
 //id out
 logic hazard_if_id_write, hazard_pc_write;
 logic control_if_flush;
@@ -65,12 +70,13 @@ logic memtoreg_0, regwrite_0;
 logic [`log_reg_num-1:0]rd_0;
 logic memwrite_0;
 logic lsword1;
+logic [`data_size-1:0] d_do_out;
 //wb out
 logic [`data_size-1:0]wb_data;
 logic [`data_size-1:0]convertdo;
 
 //assign
-assign d_address = result_1[15:2];
+assign d_address = result_1;
 
 logic  [3:0] write_byte;
 
@@ -81,11 +87,15 @@ assign d_oe = ex_mem_memread0;
 IF if0(
     .pc_to_iram(i_address),
     .pc_if_id(pc_if_id_out),
+    .data_out(ins_if_id_out),
     .if_id_write(hazard_if_id_write),
     .pc_write(hazard_pc_write),
     .if_flush(control_if_flush),
     .branch_pc(branch_pc_0),
     .pcsrc(pcsrc_0),
+    .data_in(i_do),
+    .i_stall(i_stall),
+    .d_stall(d_stall),
     .clk(clk),
     .rst(rst)
 );
@@ -114,7 +124,7 @@ ID id0(
     .r1_to_forwarding(r1_to_forwarding),
     .r2_to_forwarding(r2_to_forwarding),
     .ubranch_out(ubranch0),
-    .ins_in(i_do),
+    .ins_in(ins_if_id_out),
     .pc_in(pc_if_id_out),
     .regwrite(regwrite_0),
     .id_ex_memread(memread_0),
@@ -127,6 +137,7 @@ ID id0(
     .wb_result(result_1),
     .r1_forwarding_signal(r1_forwarding_signal),
     .r2_forwarding_signal(r2_forwarding_signal),
+    .d_stall(d_stall),
     .clk(clk),
     .rst(rst)
 );
@@ -167,6 +178,7 @@ EX ex0(
     .ins_30_14_12(ins301412_0),
     .pc_in(pc_0),
     .ubranch(ubranch0),
+    .d_stall(d_stall),
     .clk(clk),
     .rst(rst)
 );
@@ -183,17 +195,20 @@ mem_wb_reg memwbreg0(
     .wb_memtoreg_out(memtoreg_0),
     .wb_regwrite_out(regwrite_0),
     .ls_word_out(lsword1),
+    .mem_out(d_do_out),
     .result_in(result_1),
     .rd_in(rd_1),
     .wb_memtoreg_in(memtoreg_1),
     .wb_regwrite_in(regwrite_1),
     .ls_word_in(lsword0),
+    .mem_in(d_do),
+    .stall(d_stall),
     .clk(clk),
     .rst(rst)
 );
 wb_converter wbconverter0(
     .out(convertdo),
-    .in(d_do),
+    .in(d_do_out),
     .w_b(lsword1)
 );
 wb_mux wbmux0(

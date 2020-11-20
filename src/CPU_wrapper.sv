@@ -53,7 +53,6 @@ module cpu_wrapper(
 	input RVALID_M1,
 	output logic RREADY_M1,
 
-    //wrapper need clk?
 	input clk,
 	input rst
 );
@@ -62,17 +61,19 @@ module cpu_wrapper(
 	logic i_cs;
 	logic i_oe;
 	logic [3:0]i_web;
-	logic [13:0]i_address;
+	logic [31:0]i_address;
 	logic [`data_size-1:0]i_di;
 
 	logic d_cs;
 	logic d_oe;
 	logic [3:0]d_web;
-	logic [13:0]d_address;
+	logic [31:0]d_address;
 	logic [`data_size-1:0]d_di;
 //cpu input
 	logic [`data_size-1:0]i_do;
 	logic [`data_size-1:0]d_do;
+	logic i_stall;
+	logic d_stall;
 
 cpu cpu0(
 	.i_cs(i_cs),
@@ -89,11 +90,24 @@ cpu cpu0(
 
 	.i_do(i_do),
 	.d_do(d_do),
+
+	.i_stall(i_stall),
+	.d_stall(d_stall),
+
 	.clk(clk),
 	.rst(rst)
 );
 
+logic d_web_bit;
 
+always_comb begin
+	if(d_web==4'b1111) d_web_bit = 1'b0;
+	else d_web_bit = 1'b1;
+end
+
+
+assign i_stall = (~RVALID_M0) & i_oe;
+assign d_stall = ((~RVALID_M1) & d_oe) | ((~BVALID_M1) & d_web_bit);
 
 
 logic [1:0]M0_state;
@@ -109,7 +123,7 @@ always_ff @(posedge clk, posedge rst) begin
 		case (M0_state)
 			`CPU_WRAPPER_RM0_INI:   begin
 				M0_state <= (i_oe)?`CPU_WRAPPER_RM0_SEND:`CPU_WRAPPER_RM0_INI;
-				M0_r_addr_reg <= {16'b0,i_address,2'b0};
+				M0_r_addr_reg <= i_address;
 			end
 			`CPU_WRAPPER_RM0_SEND:	M0_state <= (ARREADY_M0)?`CPU_WRAPPER_RM0_WAIT:`CPU_WRAPPER_RM0_SEND;
 			`CPU_WRAPPER_RM0_WAIT:	M0_state <= (RVALID_M0)?`CPU_WRAPPER_RM0_INI:`CPU_WRAPPER_RM0_WAIT;
@@ -117,6 +131,16 @@ always_ff @(posedge clk, posedge rst) begin
 	end
 end
 always_comb begin
+			ARID_M0		= 1'b0;					//
+			ARADDR_M0	= `AXI_ADDR_BITS'b0;
+			ARLEN_M0		= `AXI_LEN_ONE;		//
+			ARSIZE_M0	= `AXI_SIZE_WORD;		//
+			ARBURST_M0	= `AXI_BURST_INC;		//
+			ARVALID_M0	= 1'b0;
+			//READ DATA
+			RREADY_M0	= 1'b0;
+			//CPU
+			i_do		= 32'b0;
 	case (M0_state)
 		`CPU_WRAPPER_RM0_INI: begin
 			//READ ADDRESS
@@ -127,7 +151,7 @@ always_comb begin
 			ARBURST_M0	= `AXI_BURST_INC;		//
 			ARVALID_M0	= 1'b0;
 			//READ DATA
-			RREADY_M0	= 1'b1;
+			RREADY_M0	= 1'b0;
 			//CPU
 			i_do		= 32'b0;
 		end
@@ -153,7 +177,7 @@ always_comb begin
 			ARBURST_M0	= `AXI_BURST_INC;		//
 			ARVALID_M0	= 1'b0;
 			//READ DATA
-			RREADY_M0	= 1'b0;
+			RREADY_M0	= 1'b1;
 			//CPU
 			i_do		= RDATA_M0;
 		end
@@ -174,15 +198,15 @@ always_ff @(posedge clk, posedge rst) begin
 	else begin
 		case(M1_state)
 			`CPU_WRAPPER_RM1_INI: 	begin
-				M1_state <= (d_oe)?`CPU_WRAPPER_RM1_RSEND:((d_web)?`CPU_WRAPPER_RM1_WSEND:`CPU_WRAPPER_RM1_INI);
+				M1_state <= (d_oe)?`CPU_WRAPPER_RM1_RSEND:((d_web_bit)?`CPU_WRAPPER_RM1_WSEND:`CPU_WRAPPER_RM1_INI);
 				if(d_oe) begin
-					M1_r_addr_reg <= {16'b0,i_address,2'b0};
+					M1_r_addr_reg <= d_address;
 					M1_w_addr_reg <= 32'b0;
 					M1_w_data_reg <= 32'b0;
 				end
-				else if(d_web) begin
+				else if(d_web_bit) begin
 					M1_r_addr_reg <= 32'b0;
-					M1_w_addr_reg <= {16'b0,d_address,2'b0};
+					M1_w_addr_reg <= d_address;
 					M1_w_data_reg <= d_di;
 				end
 				else begin
@@ -200,6 +224,31 @@ always_ff @(posedge clk, posedge rst) begin
 	end
 end
 always_comb begin
+			//Write address
+			AWID_M1		= `AXI_ID_BITS'b0;
+			AWADDR_M1	= `AXI_ADDR_BITS'b0;
+			AWLEN_M1	= `AXI_LEN_ONE;
+			AWSIZE_M1	= `AXI_SIZE_WORD;
+			AWBURST_M1	= `AXI_BURST_INC;
+			AWVALID_M1	= 1'b0;
+			//Write data
+			WDATA_M1	= `AXI_DATA_BITS'b0;
+			WSTRB_M1	= `AXI_STRB_BITS'b0;
+			WLAST_M1	= 1'b0;
+			WVALID_M1	= 1'b0;
+			//WRITE RESPONSE
+			BREADY_M1	= (BVALID_M1)?1'b1:1'b0;
+			//READ ADDRESS1
+			ARID_M1		= 1'b0;
+			ARADDR_M1	= `AXI_ADDR_BITS'b0;
+			ARLEN_M1	= `AXI_LEN_ONE;
+			ARSIZE_M1	= `AXI_SIZE_WORD;
+			ARBURST_M1	= `AXI_BURST_INC;
+			ARVALID_M1	= 1'b0;
+			//READ DATA1
+			RREADY_M1	= 1'b1;
+			//CPU
+			d_do		= 32'b0;
 	case (M1_state)
 		`CPU_WRAPPER_RM1_INI: begin
 			//Write address
@@ -226,7 +275,7 @@ always_comb begin
 			//READ DATA1
 			RREADY_M1	= 1'b1;
 			//CPU
-			i_do		= 32'b0;
+			d_do		= 32'b0;
 
 		end
 		`CPU_WRAPPER_RM1_RSEND: begin
@@ -254,7 +303,7 @@ always_comb begin
 			//READ DATA
 			RREADY_M1	= 1'b0;
 			//CPU
-			i_do		= 32'b0;
+			d_do		= 32'b0;
 		end
 		`CPU_WRAPPER_RM1_RWAIT: begin
 			//Write address
@@ -281,7 +330,7 @@ always_comb begin
 			//READ DATA
 			RREADY_M1	= 1'b0;
 			//CPU
-			i_do		= RDATA_M0;
+			d_do		= RDATA_M1;
 		end
 		`CPU_WRAPPER_RM1_WSEND: begin
 			//Write address
@@ -308,7 +357,7 @@ always_comb begin
 			//READ DATA1
 			RREADY_M1	= 1'b1;
 			//CPU
-			i_do		= 32'b0;
+			d_do		= 32'b0;
 		end
 		`CPU_WRAPPER_RM1_WWAIT: begin
 			//Write address
@@ -320,7 +369,7 @@ always_comb begin
 			AWVALID_M1	= 1'b0;
 			//Write data
 			WDATA_M1	= M1_w_data_reg;
-			WSTRB_M1	= `AXI_STRB_WORD;
+			WSTRB_M1	= d_web;
 			WLAST_M1	= 1'b1;
 			WVALID_M1	= 1'b1;
 			//WRITE RESPONSE
@@ -335,7 +384,7 @@ always_comb begin
 			//READ DATA1
 			RREADY_M1	= 1'b1;
 			//CPU
-			i_do		= 32'b0;
+			d_do		= 32'b0;
 		end
 		`CPU_WRAPPER_RM1_WREADY: begin
 			//Write address
@@ -362,7 +411,7 @@ always_comb begin
 			//READ DATA1
 			RREADY_M1	= 1'b1;
 			//CPU
-			i_do		= 32'b0;
+			d_do		= 32'b0;
 		end
 	endcase
 end
