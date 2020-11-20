@@ -131,6 +131,16 @@ always_ff @(posedge clk, posedge rst) begin
 	end
 end
 always_comb begin
+			ARID_M0		= 1'b0;					//
+			ARADDR_M0	= `AXI_ADDR_BITS'b0;
+			ARLEN_M0		= `AXI_LEN_ONE;		//
+			ARSIZE_M0	= `AXI_SIZE_WORD;		//
+			ARBURST_M0	= `AXI_BURST_INC;		//
+			ARVALID_M0	= 1'b0;
+			//READ DATA
+			RREADY_M0	= 1'b0;
+			//CPU
+			i_do		= 32'b0;
 	case (M0_state)
 		`CPU_WRAPPER_RM0_INI: begin
 			//READ ADDRESS
@@ -214,6 +224,31 @@ always_ff @(posedge clk, posedge rst) begin
 	end
 end
 always_comb begin
+			//Write address
+			AWID_M1		= `AXI_ID_BITS'b0;
+			AWADDR_M1	= `AXI_ADDR_BITS'b0;
+			AWLEN_M1	= `AXI_LEN_ONE;
+			AWSIZE_M1	= `AXI_SIZE_WORD;
+			AWBURST_M1	= `AXI_BURST_INC;
+			AWVALID_M1	= 1'b0;
+			//Write data
+			WDATA_M1	= `AXI_DATA_BITS'b0;
+			WSTRB_M1	= `AXI_STRB_BITS'b0;
+			WLAST_M1	= 1'b0;
+			WVALID_M1	= 1'b0;
+			//WRITE RESPONSE
+			BREADY_M1	= (BVALID_M1)?1'b1:1'b0;
+			//READ ADDRESS1
+			ARID_M1		= 1'b0;
+			ARADDR_M1	= `AXI_ADDR_BITS'b0;
+			ARLEN_M1	= `AXI_LEN_ONE;
+			ARSIZE_M1	= `AXI_SIZE_WORD;
+			ARBURST_M1	= `AXI_BURST_INC;
+			ARVALID_M1	= 1'b0;
+			//READ DATA1
+			RREADY_M1	= 1'b1;
+			//CPU
+			d_do		= 32'b0;
 	case (M1_state)
 		`CPU_WRAPPER_RM1_INI: begin
 			//Write address

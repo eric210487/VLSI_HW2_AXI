@@ -1,6 +1,7 @@
 `include "SRAM_wrapper.sv"
-`include "AXI/AXI.sv"
+`include "AXI.sv"
 `include "CPU_wrapper.sv"
+`include "../include/AXI_define.svh"
 
 module top(clk, rst);
 

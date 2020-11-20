@@ -1,0 +1,5 @@
+novas.*
+**/nWaveLog/
+**/build/INCA_libs/
+build/*.log
+build/*.history
